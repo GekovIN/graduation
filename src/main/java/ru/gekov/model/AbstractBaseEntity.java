@@ -1,9 +1,16 @@
 package ru.gekov.model;
 
+import javax.persistence.*;
+
+@MappedSuperclass
 public abstract class AbstractBaseEntity {
 
     public static final int START_SEQ = 100000;
 
+    @Id
+    @SequenceGenerator(name = "GLOBAL_SEQ", sequenceName = "GLOBAL_SEQ",
+                        allocationSize = 1, initialValue = START_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GLOBAL_SEQ")
     protected Integer id;
 
     protected AbstractBaseEntity() {

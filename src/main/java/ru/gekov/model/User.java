@@ -2,13 +2,36 @@ package ru.gekov.model;
 
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.*;
 
+@Entity
+@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"EMAIL"}, name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity {
 
+    @Column(name = "EMAIL", nullable = false, unique = true)
+    @Email
+    @NotBlank
+    @Size(max = 100)
     private String email;
+
+    @Column(name = "PASSWORD", nullable = false)
+    @NotBlank
+    @Size(min = 5, max = 100)
     private String password;
+
+    @Column(name = "REGISTERED", columnDefinition = "timestamp default now()")
+    @NotNull
     private Date registered = new Date();
+
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"))
+    @Column(name = "ROLE")
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User() {

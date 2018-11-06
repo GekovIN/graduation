@@ -1,7 +1,16 @@
 package ru.gekov.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+@Entity
+@Table(name = "RESTAURANTS")
 public class Restaurant extends AbstractNamedEntity {
 
+    @Column(name = "address")
+    @NotBlank
     private String address;
 
     public Restaurant() {

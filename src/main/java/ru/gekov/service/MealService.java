@@ -14,7 +14,7 @@ public interface MealService {
     Meal get(int id);
 
     Meal update(Meal meal);
-    Meal create(Meal meal);
+    Meal create(Meal meal, int restaurant_id);
     boolean delete(int id);
 
 }
