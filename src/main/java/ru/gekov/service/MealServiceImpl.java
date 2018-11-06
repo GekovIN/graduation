@@ -7,6 +7,7 @@ import ru.gekov.model.Restaurant;
 import ru.gekov.repository.MealRepository;
 import ru.gekov.repository.RestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAll(Date date) {
+    public List<Meal> getAll(LocalDate date) {
         return mealRepository.findAllByDate(date);
     }
 
@@ -33,7 +34,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAll(Date date, int restaurant_id) {
+    public List<Meal> getAll(LocalDate date, int restaurant_id) {
         return mealRepository.findAllByDateAndRestaurantId(date, restaurant_id);
     }
 

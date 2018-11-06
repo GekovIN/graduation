@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -14,7 +14,7 @@ public class Meal extends AbstractBaseEntity {
 
     @Column(name = "DATE")
     @NotNull
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "DESCRIPTION")
     @NotBlank
@@ -29,11 +29,35 @@ public class Meal extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    public Date getDate() {
+    public Meal() {
+    }
+
+    public Meal(@NotNull LocalDate date, @NotBlank String description, @NotNull BigDecimal amount) {
+        this.date = date;
+        this.description = description;
+        this.amount = amount;
+    }
+
+    public Meal(@NotNull LocalDate date, @NotBlank String description, @NotNull BigDecimal amount, @NotNull Restaurant restaurant) {
+        this.date = date;
+        this.description = description;
+        this.amount = amount;
+        this.restaurant = restaurant;
+    }
+
+    public Meal(Integer id, @NotNull LocalDate date, @NotBlank String description, @NotNull BigDecimal amount, @NotNull Restaurant restaurant) {
+        super(id);
+        this.date = date;
+        this.description = description;
+        this.amount = amount;
+        this.restaurant = restaurant;
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

@@ -8,15 +8,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.model.Meal;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Integer> {
 
-    List<Meal> findAllByDate(Date date);
+    List<Meal> findAllByDate(LocalDate date);
     List<Meal> findAllByRestaurantId(int restaurant_id);
-    List<Meal> findAllByDateAndRestaurantId(Date date, int id);
+    List<Meal> findAllByDateAndRestaurantId(LocalDate date, int id);
 
     @Transactional
     @Modifying
