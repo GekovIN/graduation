@@ -41,7 +41,7 @@ CREATE TABLE MEALS
   description   VARCHAR(255) NOT NULL,
   amount        BIGINT       NOT NULL,
   restaurant_id INTEGER      NOT NULL,
-  FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE NO ACTION
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
 );
 CREATE INDEX meals_unique_date_idx ON meals (date);
 
