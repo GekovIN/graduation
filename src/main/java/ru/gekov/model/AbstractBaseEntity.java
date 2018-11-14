@@ -1,9 +1,12 @@
 package ru.gekov.model;
 
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.*;
 
 @MappedSuperclass
-public abstract class AbstractBaseEntity {
+@Access(AccessType.FIELD)
+public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
     public static final int START_SEQ = 100000;
 
