@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.model.Restaurant;
 import ru.gekov.repository.RestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -21,39 +22,31 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<Restaurant> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Restaurant get(Integer id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElse(null);
     }
 
     @Override
-    public Restaurant getWithMeals(Integer id) {
-        return repository.findByIdWithMeals(id);
+    public Restaurant getWithMenuDishes(int id) {
+        return repository.findByIdWithMenuDishes(id);
     }
 
     @Override
-    public Restaurant update(Restaurant restaurant) {
-        return null;
+    public Restaurant getWithMenuDishes(int id, LocalDate date) {
+        return repository.findByIdAndDateWithMenuDishes(id, date);
     }
 
     @Override
-    public Restaurant create(Restaurant restaurant) {
-        return null;
-    }
-
-    @Override
-    public Restaurant simpleGet(Integer id) {
-        Restaurant restaurant = repository.simpleGet(id);
-        return restaurant;
+    public Restaurant save(Restaurant restaurant) {
+        return repository.save(restaurant);
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        return repository.delete(id) != 0;
     }
-
-
 }
