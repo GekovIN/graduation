@@ -19,26 +19,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public User get(int id) {
-        return null;
+        return repository.findById(id).orElse(null);
     }
 
     @Override
-    public User update(User restaurant) {
-        return null;
-    }
-
-    @Override
-    public User create(User restaurant) {
-        return null;
+    public User save(User restaurant) {
+        return repository.save(restaurant);
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        return repository.delete(id) != 0;
     }
 }

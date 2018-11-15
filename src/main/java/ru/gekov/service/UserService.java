@@ -8,7 +8,6 @@ public interface UserService {
 
     List<User> getAll();
     User get(int id);
-    User update(User restaurant);
-    User create(User restaurant);
+    User save(User restaurant);
     boolean delete(int id);
 }
