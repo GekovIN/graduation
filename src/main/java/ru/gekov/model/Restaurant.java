@@ -13,7 +13,7 @@ public class Restaurant extends AbstractNamedEntity {
     private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    private List<Meal> meals;
+    private List<MenuDish> menuDishes;
 
     public Restaurant() {
     }
@@ -27,12 +27,12 @@ public class Restaurant extends AbstractNamedEntity {
         return address;
     }
 
-    public List<Meal> getMeals() {
-        return meals;
+    public List<MenuDish> getMenuDishes() {
+        return menuDishes;
     }
 
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
+    public void setMenuDishes(List<MenuDish> menuDishes) {
+        this.menuDishes = menuDishes;
     }
 
     public void setAddress(String address) {
