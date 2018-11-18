@@ -3,6 +3,9 @@ package ru.gekov;
 import ru.gekov.model.Dish;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DishTestData {
 
@@ -18,16 +21,32 @@ public class DishTestData {
     public static final Integer RUSS_DISH_2_ID = EURO_DISH_1_ID +7;
     public static final Integer RUSS_DISH_3_ID = EURO_DISH_1_ID +8;
 
-    public static final Dish EURO_DISH_1 = new Dish("Салат цезарь", new BigDecimal(500));
-    public static final Dish EURO_DISH_2 = new Dish("Грибной суп", new BigDecimal(1200));
-    public static final Dish EURO_DISH_3 = new Dish("Стейк", new BigDecimal(2100));
+    public static final Dish EURO_DISH_1 = new Dish(EURO_DISH_1_ID, "Салат Цезарь", new BigDecimal(500));
+    public static final Dish EURO_DISH_2 = new Dish(EURO_DISH_2_ID, "Грибной суп", new BigDecimal(1200));
+    public static final Dish EURO_DISH_3 = new Dish(EURO_DISH_3_ID, "Стейк", new BigDecimal(2100));
 
-    public static final Dish THAI_DISH_1 = new Dish("Салат из морепродуктов", new BigDecimal(1100));
-    public static final Dish THAI_DISH_2 = new Dish("Суп том-ям", new BigDecimal(530));
-    public static final Dish THAI_DISH_3 = new Dish("Лапша с курицей", new BigDecimal(2100));
+    public static final Dish THAI_DISH_1 = new Dish(THAI_DISH_1_ID, "Салат из морепродуктов", new BigDecimal(1100));
+    public static final Dish THAI_DISH_2 = new Dish(THAI_DISH_2_ID, "Суп том-ям", new BigDecimal(530));
+    public static final Dish THAI_DISH_3 = new Dish(THAI_DISH_3_ID, "Лапша с курицей", new BigDecimal(2100));
 
-    public static final Dish RUSS_DISH_1 = new Dish("Салат оливье", new BigDecimal(320));
-    public static final Dish RUSS_DISH_2 = new Dish("Борщ", new BigDecimal(550));
-    public static final Dish RUSS_DISH_3 = new Dish("Котлеты с картофелем", new BigDecimal(700));
+    public static final Dish RUSS_DISH_1 = new Dish(RUSS_DISH_1_ID, "Салат оливье", new BigDecimal(320));
+    public static final Dish RUSS_DISH_2 = new Dish(RUSS_DISH_2_ID, "Борщ", new BigDecimal(550));
+    public static final Dish RUSS_DISH_3 = new Dish(RUSS_DISH_3_ID, "Котлеты с картофелем", new BigDecimal(700));
+
+    public static final List<Dish> ALL_DISHES = List.of(EURO_DISH_1, EURO_DISH_2, EURO_DISH_3,
+                                                        THAI_DISH_1, THAI_DISH_2,THAI_DISH_3,
+                                                        RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3);
+
+    public static final List<Dish> ALL_DISHES_EXCEPT_FIRST = List.of(EURO_DISH_2, EURO_DISH_3,
+                                                        THAI_DISH_1, THAI_DISH_2,THAI_DISH_3,
+                                                        RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3);
+
+    public static void assertMatch(Dish actual, Dish expected) {
+        assertThat(actual).isEqualToComparingFieldByField(expected);
+    }
+
+    public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected) {
+        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
+    }
 
 }

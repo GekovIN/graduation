@@ -10,34 +10,30 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
     public static final int START_SEQ = 100000;
 
-    @Id
-    @SequenceGenerator(name = "GLOBAL_SEQ", sequenceName = "GLOBAL_SEQ",
-                        allocationSize = 1, initialValue = START_SEQ)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GLOBAL_SEQ")
-    protected Integer id;
+//    @Id
+//    @SequenceGenerator(name = "GLOBAL_SEQ", sequenceName = "GLOBAL_SEQ",
+//                        allocationSize = 1, initialValue = START_SEQ)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GLOBAL_SEQ")
+//    protected Integer id;
 
     protected AbstractBaseEntity() {
     }
 
-    protected AbstractBaseEntity(Integer id) {
-        this.id = id;
-    }
+//    protected AbstractBaseEntity(Integer id) {
+//        this.id = id;
+//    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public abstract void setId(Integer id);
 
-    public Integer getId() {
-        return id;
-    }
+    public abstract Integer getId();
 
     public boolean isNew() {
-        return this.id == null;
+        return getId() == null;
     }
 
     @Override
     public String toString() {
-        return String.format("Entity %s (%s)", getClass().getName(), id);
+        return String.format("Entity %s (%s)", getClass().getName(), getId());
     }
 
 
@@ -50,11 +46,11 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
             return false;
         }
         AbstractBaseEntity that = (AbstractBaseEntity) o;
-        return id != null && id.equals(that.id);
+        return getId() != null && getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return id == null ? 0 : id;
+        return getId() == null ? 0 : getId();
     }
 }

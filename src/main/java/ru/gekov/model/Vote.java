@@ -10,6 +10,12 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "VOTES")
 public class Vote extends AbstractBaseEntity {
 
+    @Id
+    @SequenceGenerator(name = "VOTES_SEQ", sequenceName = "VOTES_SEQ",
+            allocationSize = 1, initialValue = START_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "VOTES_SEQ")
+    private Integer id;
+
     @Column(name = "DATE")
     private LocalDate date;
 
@@ -22,6 +28,7 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "RESTAURANT_ID")
     @NotNull
     private Restaurant restaurant;
+
 
     public Vote() {
     }
@@ -54,5 +61,13 @@ public class Vote extends AbstractBaseEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

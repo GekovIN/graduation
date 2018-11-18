@@ -8,6 +8,12 @@ import java.util.List;
 @Table(name = "RESTAURANTS")
 public class Restaurant extends AbstractNamedEntity {
 
+    @Id
+    @SequenceGenerator(name = "RESTAURANTS_SEQ", sequenceName = "RESTAURANTS_SEQ",
+            allocationSize = 1, initialValue = START_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESTAURANTS_SEQ")
+    private Integer id;
+
     @Column(name = "address")
     @NotBlank
     private String address;
@@ -15,11 +21,13 @@ public class Restaurant extends AbstractNamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<MenuDish> menuDishes;
 
+
     public Restaurant() {
     }
 
     public Restaurant(Integer id, String name, String address) {
-        super(id, name);
+        super(name);
+        this.id=id;
         this.address = address;
     }
 
@@ -37,5 +45,13 @@ public class Restaurant extends AbstractNamedEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

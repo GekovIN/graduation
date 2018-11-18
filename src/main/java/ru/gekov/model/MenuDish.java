@@ -10,6 +10,12 @@ import static javax.persistence.FetchType.EAGER;
 @Table(name = "MENU_DISHES", uniqueConstraints = {@UniqueConstraint(columnNames = {"RESTAURANT_ID", "DATE"}, name = "meals_date_idx")})
 public class MenuDish extends AbstractBaseEntity {
 
+    @Id
+    @SequenceGenerator(name = "MENU_DISHES_SEQ", sequenceName = "MENU_DISHES_SEQ",
+            allocationSize = 1, initialValue = START_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MENU_DISHES_SEQ")
+    private Integer id;
+
     @Column(name = "DATE")
     @NotNull
     private LocalDate date;
@@ -23,6 +29,7 @@ public class MenuDish extends AbstractBaseEntity {
     @JoinColumn(name = "RESTAURANT_ID")
     @NotNull
     private Restaurant restaurant;
+
 
     public MenuDish() {
     }
@@ -55,5 +62,13 @@ public class MenuDish extends AbstractBaseEntity {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

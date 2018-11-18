@@ -16,11 +16,6 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity {
     protected AbstractNamedEntity() {
     }
 
-    protected AbstractNamedEntity(Integer id, String name) {
-        super(id);
-        this.name = name;
-    }
-
     public AbstractNamedEntity(@NotBlank @Size(min = 2, max = 100) String name) {
         this.name = name;
     }
@@ -35,6 +30,6 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity {
 
     @Override
     public String toString() {
-        return String.format("Entity %s (%s, '%s')", getClass().getName(), id, name);
+        return String.format("Entity %s (%s, '%s')", getClass().getName(), getId(), name);
     }
 }

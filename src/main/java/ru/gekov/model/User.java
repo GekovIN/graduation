@@ -13,6 +13,12 @@ import java.util.*;
 @Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"EMAIL"}, name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity {
 
+    @Id
+    @SequenceGenerator(name = "USERS_SEQ", sequenceName = "USERS_SEQ",
+            allocationSize = 1, initialValue = START_SEQ)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERS_SEQ")
+    private Integer id;
+
     @Column(name = "EMAIL", nullable = false, unique = true)
     @Email
     @NotBlank
@@ -34,6 +40,7 @@ public class User extends AbstractNamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+
     public User() {
     }
 
@@ -42,7 +49,8 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
-        super(id, name);
+        super(name);
+        this.id = id;
         this.email = email;
         this.password = password;
         this.registered = registered;
@@ -80,5 +88,13 @@ public class User extends AbstractNamedEntity {
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? Collections.emptySet() : EnumSet.copyOf(roles);
 
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
