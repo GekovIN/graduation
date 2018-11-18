@@ -17,8 +17,8 @@ public class Dish extends AbstractNamedEntity {
     public Dish() {
     }
 
-    public Dish(Integer id, String name, @NotNull BigDecimal cost) {
-        super(id, name);
+    public Dish(String name, @NotNull BigDecimal cost) {
+        super(name);
         this.cost = cost;
     }
 
