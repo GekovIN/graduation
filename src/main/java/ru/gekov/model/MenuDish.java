@@ -40,6 +40,13 @@ public class MenuDish extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
+    public MenuDish(Integer id, @NotNull LocalDate date, Dish dish, @NotNull Restaurant restaurant) {
+        this.id = id;
+        this.date = date;
+        this.dish = dish;
+        this.restaurant = restaurant;
+    }
+
     public LocalDate getDate() {
         return date;
     }
@@ -70,5 +77,15 @@ public class MenuDish extends AbstractBaseEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuDish{" +
+                "id=" + id +
+                ", date=" + date +
+                ", dish=" + dish +
+//                ", restaurant=" + restaurant +
+                '}';
     }
 }

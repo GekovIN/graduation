@@ -9,8 +9,8 @@ public interface RestaurantService {
 
     List<Restaurant> getAll();
     Restaurant get(Integer id);
-    Restaurant getWithMenuDishes(int id);
-    Restaurant getWithMenuDishes(int id, LocalDate date);
+    Restaurant getWithMenuDishesById(int id);
+    Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date);
     Restaurant save(Restaurant restaurant);
     boolean delete(int id);
 

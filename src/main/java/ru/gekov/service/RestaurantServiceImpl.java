@@ -31,12 +31,12 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant getWithMenuDishes(int id) {
+    public Restaurant getWithMenuDishesById(int id) {
         return repository.findByIdWithMenuDishes(id);
     }
 
     @Override
-    public Restaurant getWithMenuDishes(int id, LocalDate date) {
+    public Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date) {
         return repository.findByIdAndDateWithMenuDishes(id, date);
     }
 

@@ -68,7 +68,8 @@ CREATE TABLE MENU_DISHES
   date          DATE    NOT NULL,
   dish_id       INTEGER NOT NULL,
   restaurant_id INTEGER NOT NULL,
-  FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE NO ACTION
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
+  FOREIGN KEY (dish_id) REFERENCES DISHES(id) ON DELETE CASCADE
 );
 CREATE INDEX menu_date_idx ON MENU_DISHES (date);
 
