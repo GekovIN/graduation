@@ -65,7 +65,7 @@ public class Restaurant extends AbstractNamedEntity {
         return "Restaurant{" +
                 "id=" + id +
                 ", address='" + address + '\'' +
-                ", menuDishes=" + menuDishes +
+                ", menuDishes= Lazy Init" +
                 '}';
     }
 }

@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface MenuDishService {
 
-    List<MenuDish> getAll(LocalDate date);
-    List<MenuDish> getAll(int restaurant_id);
-    List<MenuDish> getAll(LocalDate date, int restaurant_id);
+    List<MenuDish> getAll();
+    List<MenuDish> getAllByDate(LocalDate date);
+    List<MenuDish> getAllByRestaurantId(int restaurant_id);
+    List<MenuDish> getAllByDateAndRestaurantId(LocalDate date, int restaurant_id);
     MenuDish getById(int id);
 
     MenuDish update(MenuDish menuDish, int dishId, int restaurantId);

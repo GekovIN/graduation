@@ -10,9 +10,18 @@ import ru.gekov.model.MenuDish;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MenuDishRepository extends JpaRepository<MenuDish, Integer> {
+
+    @Override
+    @EntityGraph(attributePaths = {"dish", "restaurant"})
+    Optional<MenuDish> findById(Integer integer);
+
+    @Override
+    @EntityGraph(attributePaths = {"dish", "restaurant"})
+    List<MenuDish> findAll();
 
     @EntityGraph(attributePaths = {"dish", "restaurant"})
     List<MenuDish> findAllByDate(LocalDate date);

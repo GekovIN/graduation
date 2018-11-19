@@ -12,8 +12,9 @@ import java.time.LocalDate;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
+    //Join menuDishes with dishes in one select:
     @Transactional
-    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.menuDishes m WHERE r.id=?1")
+    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.menuDishes m LEFT JOIN FETCH m.dish WHERE r.id=?1")
     Restaurant findByIdWithMenuDishes(int id);
 
     @Transactional

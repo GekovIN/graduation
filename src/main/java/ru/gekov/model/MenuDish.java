@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "MENU_DISHES", uniqueConstraints = {@UniqueConstraint(columnNames = {"RESTAURANT_ID", "DATE"}, name = "meals_date_idx")})
@@ -20,12 +21,12 @@ public class MenuDish extends AbstractBaseEntity {
     @NotNull
     private LocalDate date;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "DISH_ID")
     @NotNull
     private Dish dish;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "RESTAURANT_ID")
     @NotNull
     private Restaurant restaurant;
@@ -85,7 +86,7 @@ public class MenuDish extends AbstractBaseEntity {
                 "id=" + id +
                 ", date=" + date +
                 ", dish=" + dish +
-//                ", restaurant=" + restaurant +
+                ", restaurant=" + restaurant +
                 '}';
     }
 }

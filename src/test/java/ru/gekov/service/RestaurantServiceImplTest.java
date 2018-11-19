@@ -9,8 +9,8 @@ import ru.gekov.model.Restaurant;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.gekov.MenuDishTestData.EURO_MEALS_2018_10_29;
-import static ru.gekov.MenuDishTestData.THAI_MEALS_2018_10_30;
+import static ru.gekov.MenuDishTestData.EURO_MENU_2018_10_29;
+import static ru.gekov.MenuDishTestData.THAI_MENU_2018_10_30;
 import static ru.gekov.RestaurantTestData.*;
 
 public class RestaurantServiceImplTest extends ServiceTest {
@@ -35,7 +35,7 @@ public class RestaurantServiceImplTest extends ServiceTest {
         Restaurant restaurant = service.getWithMenuDishesById(EURO_REST_ID);
         List<MenuDish> menuDishes = restaurant.getMenuDishes();
         assertMatch(restaurant, EURO_REST);
-        MenuDishTestData.assertMatch(menuDishes, EURO_MEALS_2018_10_29);
+        MenuDishTestData.assertMatch(menuDishes, EURO_MENU_2018_10_29);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class RestaurantServiceImplTest extends ServiceTest {
         Restaurant restaurant = service.getWithMenuDishesByIdAndDate(THAI_REST_ID, LocalDate.of(2018, 10, 30));
         List<MenuDish> menuDishes = restaurant.getMenuDishes();
         assertMatch(restaurant, THAI_REST);
-        MenuDishTestData.assertMatch(menuDishes, THAI_MEALS_2018_10_30);
+        MenuDishTestData.assertMatch(menuDishes, THAI_MENU_2018_10_30);
     }
 
     @Test

@@ -27,17 +27,22 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public List<MenuDish> getAll(LocalDate date) {
+    public List<MenuDish> getAll() {
+        return menuDishRepository.findAll();
+    }
+
+    @Override
+    public List<MenuDish> getAllByDate(LocalDate date) {
         return menuDishRepository.findAllByDate(date);
     }
 
     @Override
-    public List<MenuDish> getAll(int restaurantId) {
+    public List<MenuDish> getAllByRestaurantId(int restaurantId) {
         return menuDishRepository.findAllByRestaurantId(restaurantId);
     }
 
     @Override
-    public List<MenuDish> getAll(LocalDate date, int restaurantId) {
+    public List<MenuDish> getAllByDateAndRestaurantId(LocalDate date, int restaurantId) {
         return menuDishRepository.findAllByDateAndRestaurantId(date, restaurantId);
     }
 
