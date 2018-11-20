@@ -37,7 +37,7 @@ public class User extends AbstractNamedEntity {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"))
     @Column(name = "ROLE")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private Set<Role> roles;
 
 

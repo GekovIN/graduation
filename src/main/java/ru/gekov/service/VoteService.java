@@ -9,6 +9,7 @@ import java.util.List;
 public interface VoteService {
 
     Vote get(int id);
+    List<Vote> getAll();
     List<Vote> getByDate(LocalDate date);
     List<Vote> getByRestaurantAndDate(int restaurantId, LocalDate date);
     Vote getByUserAndDate(int userId, LocalDate date);

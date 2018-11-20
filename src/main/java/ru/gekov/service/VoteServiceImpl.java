@@ -33,6 +33,11 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
+    public List<Vote> getAll() {
+        return voteRepository.findAll();
+    }
+
+    @Override
     public Vote get(int id) {
         return voteRepository.findById(id).orElse(null);
     }
@@ -67,7 +72,7 @@ public class VoteServiceImpl implements VoteService {
     private Vote update(Vote vote, int restaurantId) {
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         vote.setRestaurant(restaurant);
-        return vote;
+        return voteRepository.save(vote);
     }
 
     private Vote create(LocalDate date, int userId, int restaurantId) {
@@ -84,6 +89,6 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Long countVotes(LocalDate date, int restaurantId) {
-        return voteRepository.countAllByRestaurantAndDate(restaurantId, date);
+        return voteRepository.countAllByRestaurantIdAndDate(restaurantId, date);
     }
 }

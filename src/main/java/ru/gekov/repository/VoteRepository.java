@@ -1,5 +1,6 @@
 package ru.gekov.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,10 +14,24 @@ import java.util.Optional;
 
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
+    @Override
+    @EntityGraph(attributePaths = {"user", "restaurant"})
+    List<Vote> findAll();
+
+    @Override
+    @EntityGraph(attributePaths = {"user", "restaurant"})
+    Optional<Vote> findById(Integer integer);
+
+    @EntityGraph(attributePaths = {"user", "restaurant"})
     List<Vote> findByDate(LocalDate date);
+
+    @EntityGraph(attributePaths = {"user", "restaurant"})
     List<Vote> findByRestaurantIdAndDate(int restaurantId, LocalDate date);
+
+    @EntityGraph(attributePaths = {"user", "restaurant"})
     Optional<Vote> findByUserIdAndDate(int userId, LocalDate date);
-    Long countAllByRestaurantAndDate(int restaurantId, LocalDate date);
+
+    Long countAllByRestaurantIdAndDate(int restaurantId, LocalDate date);
 
     @Transactional
     @Modifying
