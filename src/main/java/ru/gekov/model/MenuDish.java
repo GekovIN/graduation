@@ -35,6 +35,16 @@ public class MenuDish extends AbstractBaseEntity {
     public MenuDish() {
     }
 
+    public MenuDish(@NotNull LocalDate date, @NotNull Restaurant restaurant) {
+        this.date = date;
+        this.restaurant = restaurant;
+    }
+
+    public MenuDish(Integer id, @NotNull LocalDate date) {
+        this.id = id;
+        this.date = date;
+    }
+
     public MenuDish(@NotNull LocalDate date, Dish dish, @NotNull Restaurant restaurant) {
         this.date = date;
         this.dish = dish;
