@@ -8,6 +8,7 @@ import ru.gekov.model.Restaurant;
 import ru.gekov.repository.DishRepository;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
+import ru.gekov.to.RestaurantDateMenuTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,8 +43,16 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public List<MenuDish> getAllByDateAndRestaurantId(LocalDate date, int restaurantId) {
-        return menuDishRepository.findAllByDateAndRestaurantId(date, restaurantId);
+    public RestaurantDateMenuTo getAllByDateAndRestaurantId(LocalDate date, int restaurantId) {
+        List<MenuDish> menuDishes = menuDishRepository.findAllByDateAndRestaurantId(date, restaurantId);
+        RestaurantDateMenuTo menuTo = new RestaurantDateMenuTo(date, menuDishes);
+        if (!menuDishes.isEmpty()) {
+            MenuDish menuDish = menuDishes.get(0);
+            menuTo.setRestaurant(menuDish.getRestaurant());
+        } else {
+            menuTo.setRestaurant(restaurantRepository.findById(restaurantId).orElse(null));
+        }
+        return menuTo;
     }
 
     @Override

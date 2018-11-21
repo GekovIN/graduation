@@ -34,11 +34,11 @@ public class MenuDishServiceImplTest extends ServiceTest {
         assertMatch(all, EURO_MENU_2018_10_29);
     }
 
-    @Test
-    public void getAllByDateAndId() {
-        List<MenuDish> all = service.getAllByDateAndRestaurantId(LocalDate.of(2018, 10, 30), THAI_REST_ID);
-        assertMatch(all, THAI_MENU_2018_10_30);
-    }
+//    @Test
+//    public void getAllByDateAndId() {
+//        List<MenuDish> all = service.getAllByDateAndRestaurantId(LocalDate.of(2018, 10, 30), THAI_REST_ID);
+//        assertMatch(all, THAI_MENU_2018_10_30);
+//    }
 
     @Test
     public void getById() {

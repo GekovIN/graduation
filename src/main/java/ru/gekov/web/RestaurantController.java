@@ -13,6 +13,7 @@ import ru.gekov.model.Restaurant;
 import ru.gekov.service.DishService;
 import ru.gekov.service.MenuDishService;
 import ru.gekov.service.RestaurantService;
+import ru.gekov.to.RestaurantDateMenuTo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -50,8 +51,8 @@ public class RestaurantController {
     //Test:
     @GetMapping("/{id}/menu")
     public String getCurrentDateMenuDish(@PathVariable Integer id, Model model) {
-        List<MenuDish> menuDishes = menuDishService.getAllByDateAndRestaurantId(LocalDate.of(2018, 10, 29), id);
-        model.addAttribute("menu", menuDishes);
+        RestaurantDateMenuTo restaurantDateMenu = menuDishService.getAllByDateAndRestaurantId(LocalDate.of(2018, 10, 29), id);
+        model.addAttribute("menu", restaurantDateMenu);
         return "menu";
     }
 

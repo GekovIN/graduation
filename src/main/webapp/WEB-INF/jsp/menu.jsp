@@ -9,7 +9,8 @@
 <body>
 
 <section>
-    <h3>Menu</h3>
+    <h3>Restaurant: ${menu.restaurant.name}</h3>
+    <h3>Menu of ${menu.date}</h3>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -18,7 +19,7 @@
             <th>Actions</th>
         </tr>
         </thead>
-        <c:forEach items="${menu}" var="menu">
+        <c:forEach items="${menu.menuDishes}" var="menu">
             <jsp:useBean id="menu" class="ru.gekov.model.MenuDish"/>
             <tr>
                 <td>${menu.dish.name}</td>
@@ -26,13 +27,13 @@
                 <td>
                     <a href="${pageContext.request.contextPath}/restaurants/menu/${menu.id}/update">Update</a>
                     | <a href="${pageContext.request.contextPath}/restaurants/${menu.restaurant.id}/menu/${menu.id}/delete">Delete</a>
-                    | <a href="${pageContext.request.contextPath}/restaurants/${menu.restaurant.id}/menu/add">Add menu dish</a>
                 </td>
                 <%--<td><a href="${pageContext.request.contextPath}/restaurants/${menu.restaurant.id}/menu/${menu.id}/delete">Delete</a></td>--%>
                 <%--<td><a href="${pageContext.request.contextPath}/restaurants/${menu.restaurant.id}/menu/add">Add menu dish</a></td>--%>
             </tr>
         </c:forEach>
     </table>
+    <a href="${pageContext.request.contextPath}/restaurants/${menu.restaurant.id}/menu/add">Add menu dish</a>
 </section>
 </body>
 </html>
