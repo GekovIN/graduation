@@ -25,7 +25,7 @@
                 <td>${rest.address}</td>
                 <td><a href="${pageContext.request.contextPath}/restaurants/update/${rest.id}">Update</a></td>
                 <td><a href="${pageContext.request.contextPath}/restaurants/delete/${rest.id}">Delete</a></td>
-                <td><a href="${pageContext.request.contextPath}/restaurants/${rest.id}/menu">Show menu</a></td>
+                <td><a href="${pageContext.request.contextPath}/menus?restId=${rest.id}">Show menu</a></td>
             </tr>
         </c:forEach>
     </table>

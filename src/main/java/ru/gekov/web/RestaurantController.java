@@ -1,97 +1,60 @@
 package ru.gekov.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import ru.gekov.model.Dish;
-import ru.gekov.model.MenuDish;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.Restaurant;
-import ru.gekov.service.DishService;
-import ru.gekov.service.MenuDishService;
 import ru.gekov.service.RestaurantService;
-import ru.gekov.to.RestaurantDateMenuTo;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
+import java.net.URI;
 import java.util.List;
 
-@Controller
-@RequestMapping(value = "/restaurants")
+@RestController
+@RequestMapping(RestaurantController.REST_URL)
 public class RestaurantController {
 
+    static final String REST_URL = "/restaurants";
     private final RestaurantService restaurantService;
-    private final MenuDishService menuDishService;
-    private final DishService dishService;
 
     @Autowired
-    public RestaurantController(RestaurantService restaurantService, MenuDishService menuDishService, DishService dishService) {
+    public RestaurantController(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
-        this.menuDishService = menuDishService;
-        this.dishService = dishService;
     }
 
-    @GetMapping
-    public String getAll(Model model) {
-        List<Restaurant> restaurants = restaurantService.getAll();
-        model.addAttribute("restaurants", restaurants);
-        return "restaurants";
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Restaurant> getAll() {
+        return restaurantService.getAll();
     }
 
-//    @GetMapping("/{id}}/menu")
-//    public String getCurrentDateMenuDish(@PathVariable Integer id, Model model) {
-//        List<MenuDish> menuDishes = menuDishService.getAllByDateAndRestaurantId(LocalDate.now(), id);
-//        model.addAttribute("menu", menuDishes);
-//        return "menu";
-//    }
-
-    //Test:
-    @GetMapping("/{id}/menu")
-    public String getCurrentDateMenuDish(@PathVariable Integer id, Model model) {
-        RestaurantDateMenuTo restaurantDateMenu = menuDishService.getAllByDateAndRestaurantId(LocalDate.of(2018, 10, 29), id);
-        model.addAttribute("menu", restaurantDateMenu);
-        return "menu";
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Restaurant getById(@PathVariable int id) {
+        return restaurantService.get(id);
     }
 
-    @GetMapping("/{id}/menu/add")
-    public String createForm(Model model, @PathVariable int id) {
-        List<Dish> dishes = dishService.getAll();
-        model.addAttribute("dishes", dishes);
-        Restaurant restaurant = restaurantService.get(id);
-        MenuDish menuDish = new MenuDish(LocalDate.now(), restaurant);
-        model.addAttribute("menu", menuDish);
-        return "menuForm";
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        restaurantService.delete(id);
     }
 
-    @GetMapping("/menu/{menuId}/update")
-    public String updateForm(Model model, @PathVariable int menuId) {
-        MenuDish menuDish = menuDishService.getById(menuId);
-        model.addAttribute("menu", menuDish);
-        List<Dish> dishes = dishService.getAll();
-        model.addAttribute("dishes", dishes);
-        return "menuForm";
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody Restaurant restaurant) {
+        restaurantService.save(restaurant);
     }
 
-    @PostMapping("/{restId}/menu/save")
-    public String save(HttpServletRequest request, @PathVariable int restId) {
-        String menuDishId = request.getParameter("id");
-        LocalDate date = LocalDate.parse(request.getParameter("date"));
-        int dishId = Integer.parseInt(request.getParameter("selectedDishId"));
-        if (menuDishId == null || menuDishId.isEmpty()) {
-            menuDishService.create(date, dishId, restId);
-        } else {
-            MenuDish menuDish = new MenuDish(Integer.parseInt(menuDishId), date);
-            menuDishService.update(menuDish, dishId, restId);
-        }
-        return "redirect:/restaurants/" + restId + "/menu";
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+                 produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
+        Restaurant created = restaurantService.save(restaurant);
+        URI newEntityUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+
+        return ResponseEntity.created(newEntityUri).body(created);
     }
 
-    @GetMapping("/{restId}/menu/{menuId}/delete")
-    public String delete(@PathVariable int menuId, @PathVariable String restId) {
-        menuDishService.delete(menuId);
-        return "redirect:/restaurants/" + restId + "/menu";
-    }
 }
