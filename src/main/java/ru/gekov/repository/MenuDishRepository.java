@@ -26,7 +26,7 @@ public interface MenuDishRepository extends JpaRepository<MenuDish, Integer> {
     @EntityGraph(attributePaths = {"dish", "restaurant"})
     List<MenuDish> findAllByDate(LocalDate date);
 
-    @EntityGraph(attributePaths = {"dish", "restaurant"})
+    @EntityGraph(attributePaths = {"dish"})
     List<MenuDish> findAllByRestaurantId(int restaurant_id);
 
     @EntityGraph(attributePaths = {"dish", "restaurant"})

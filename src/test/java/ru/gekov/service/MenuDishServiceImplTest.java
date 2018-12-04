@@ -3,6 +3,7 @@ package ru.gekov.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.gekov.model.MenuDish;
+import ru.gekov.util.MenuDishUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +25,8 @@ public class MenuDishServiceImplTest extends ServiceTest {
 
     @Test
     public void getAllByDate() {
-        List<MenuDish> all = service.getAllByDate(LocalDate.of(2018, 10, 29));
+        List<MenuDish> all = service.getAllByDate(LocalDate.of(2018, 10, 31));
+        MenuDishUtil.getDateMenus(LocalDate.of(2018, 10, 31), all);
         assertMatch(all, EURO_MENU_2018_10_29);
     }
 
@@ -36,7 +38,7 @@ public class MenuDishServiceImplTest extends ServiceTest {
 
 //    @Test
 //    public void getAllByDateAndId() {
-//        List<MenuDish> all = service.getAllByDateAndRestaurantId(LocalDate.of(2018, 10, 30), THAI_REST_ID);
+//        List<MenuDish> all = service.getByDateAndRestaurantId(LocalDate.of(2018, 10, 30), THAI_REST_ID);
 //        assertMatch(all, THAI_MENU_2018_10_30);
 //    }
 
@@ -46,13 +48,13 @@ public class MenuDishServiceImplTest extends ServiceTest {
         assertMatch(menuDish, EURO_MENU_DISH_1);
     }
 
-    @Test
-    public void create() {
-        MenuDish newMenuDish = new MenuDish(RUSS_MENU_DISH_3_ID+1, LocalDate.of(2018, 1, 1), EURO_DISH_1, EURO_REST);
-        MenuDish created = service.create(LocalDate.of(2018, 1, 1), EURO_DISH_1_ID, EURO_REST_ID);
-        MenuDish dish = service.getById(created.getId());
-        assertMatch(dish, newMenuDish);
-    }
+//    @Test
+//    public void create() {
+//        MenuDish newMenuDish = new MenuDish(RUSS_MENU_DISH_3_ID+1, LocalDate.of(2018, 1, 1), EURO_DISH_1, EURO_REST);
+//        MenuDish created = service.create(LocalDate.of(2018, 1, 1), EURO_DISH_1_ID, EURO_REST_ID);
+//        MenuDish dish = service.getById(created.getId());
+//        assertMatch(dish, newMenuDish);
+//    }
 
     @Test
     public void update() {

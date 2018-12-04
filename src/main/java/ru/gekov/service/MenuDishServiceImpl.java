@@ -8,10 +8,14 @@ import ru.gekov.model.Restaurant;
 import ru.gekov.repository.DishRepository;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
-import ru.gekov.to.RestaurantDateMenuTo;
+import ru.gekov.to.DateMenuTo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuDishServiceImpl implements MenuDishService {
@@ -43,16 +47,10 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public RestaurantDateMenuTo getAllByDateAndRestaurantId(LocalDate date, int restaurantId) {
+    public List<MenuDish> getByDateAndRestaurantId(LocalDate date, int restaurantId) {
         List<MenuDish> menuDishes = menuDishRepository.findAllByDateAndRestaurantId(date, restaurantId);
-        RestaurantDateMenuTo menuTo = new RestaurantDateMenuTo(date, menuDishes);
-        if (!menuDishes.isEmpty()) {
-            MenuDish menuDish = menuDishes.get(0);
-            menuTo.setRestaurant(menuDish.getRestaurant());
-        } else {
-            menuTo.setRestaurant(restaurantRepository.findById(restaurantId).orElse(null));
-        }
-        return menuTo;
+
+        return menuDishes;
     }
 
     @Override
@@ -70,10 +68,11 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public MenuDish create(LocalDate date, int dishId, int restaurantId) {
+    public MenuDish create(MenuDish menuDish, int dishId, int restaurantId) {
         Dish dish = dishRepository.getOne(dishId);
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
-        MenuDish menuDish = new MenuDish(date, dish, restaurant);
+        menuDish.setDish(dish);
+        menuDish.setRestaurant(restaurant);
         return menuDishRepository.save(menuDish);
     }
 

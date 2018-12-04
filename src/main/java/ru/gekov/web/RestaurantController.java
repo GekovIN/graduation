@@ -16,39 +16,39 @@ import java.util.List;
 public class RestaurantController {
 
     static final String REST_URL = "/restaurants";
-    private final RestaurantService restaurantService;
+    private final RestaurantService service;
 
     @Autowired
     public RestaurantController(RestaurantService restaurantService) {
-        this.restaurantService = restaurantService;
+        this.service = restaurantService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Restaurant> getAll() {
-        return restaurantService.getAll();
+        return service.getAll();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Restaurant getById(@PathVariable int id) {
-        return restaurantService.get(id);
+        return service.get(id);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        restaurantService.delete(id);
+        service.delete(id);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Restaurant restaurant) {
-        restaurantService.save(restaurant);
+        service.save(restaurant);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
-        Restaurant created = restaurantService.save(restaurant);
+        Restaurant created = service.save(restaurant);
         URI newEntityUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId())
