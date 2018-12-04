@@ -3,12 +3,12 @@ package ru.gekov.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.net.URI;
 import ru.gekov.model.Restaurant;
 import ru.gekov.service.RestaurantService;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -39,22 +39,16 @@ public class RestaurantController {
         service.delete(id);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Restaurant restaurant) {
-        service.save(restaurant);
-    }
+    @PostMapping
+    public void createOrUpdate(@RequestParam("id") Integer id,
+                               @RequestParam("name") String name,
+                               @RequestParam("address") String address) {
+        Restaurant restaurant = new Restaurant(id, name, address);
+        if (restaurant.isNew()) {
+            service.save(restaurant);
+        }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
-        Restaurant created = service.save(restaurant);
-        URI newEntityUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId())
-                .toUri();
-
-        return ResponseEntity.created(newEntityUri).body(created);
+        //TODO Update
     }
 
 }
