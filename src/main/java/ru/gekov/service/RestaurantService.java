@@ -11,7 +11,11 @@ public interface RestaurantService {
     Restaurant get(Integer id);
     Restaurant getWithMenuDishesById(int id);
     Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date);
-    Restaurant save(Restaurant restaurant);
+
+    List<Restaurant> getWithMenuDishesByDate(LocalDate date);
+
+    Restaurant update(Restaurant restaurant);
+    Restaurant create(Restaurant restaurant);
     boolean delete(int id);
 
 }

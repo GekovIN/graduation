@@ -1,21 +1,34 @@
 package ru.gekov.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import ru.gekov.model.Restaurant;
 import ru.gekov.service.RestaurantService;
+import ru.gekov.util.ValidationUtil;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.format.annotation.DateTimeFormat.*;
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping(RestaurantController.REST_URL)
 public class RestaurantController {
 
     static final String REST_URL = "/restaurants";
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     private final RestaurantService service;
 
     @Autowired
@@ -23,32 +36,53 @@ public class RestaurantController {
         this.service = restaurantService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public List<Restaurant> getAll() {
+        log.info("get all restaurants");
         return service.getAll();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public Restaurant getById(@PathVariable int id) {
+        log.info("get restaurant {}", id);
         return service.get(id);
+    }
+
+    @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
+    public List<Restaurant> getAllByMenuDishDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        log.info("get restaurants with menuDishes by date {}", date);
+        return service.getWithMenuDishesByDate(date);
+    }
+
+    @GetMapping(value = "/{id}", params = "date", produces = APPLICATION_JSON_VALUE)
+    public Restaurant getByIdAndMenuDishDate(@PathVariable("id") Integer id,
+                                             @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
+        log.info("get restaurant {} with menuDishes by date {}", id, date);
+        return service.getWithMenuDishesByIdAndDate(id, date);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
+        log.info("delete restaurant {}", id);
         service.delete(id);
     }
 
     @PostMapping
-    public void createOrUpdate(@RequestParam("id") Integer id,
-                               @RequestParam("name") String name,
-                               @RequestParam("address") String address) {
-        Restaurant restaurant = new Restaurant(id, name, address);
+    public ResponseEntity<String> createOrUpdate(@Valid Restaurant restaurant, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return ValidationUtil.processBindingErrors(result);
+        }
         if (restaurant.isNew()) {
-            service.save(restaurant);
+            log.info("create new restaurant");
+            service.create(restaurant);
+        } else {
+            log.info("update restaurant {}", restaurant.getId());
+            service.update(restaurant);
         }
 
-        //TODO Update
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

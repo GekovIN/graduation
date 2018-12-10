@@ -1,10 +1,11 @@
 package ru.gekov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -29,6 +30,7 @@ public class MenuDish extends AbstractBaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "RESTAURANT_ID")
     @NotNull
+    @JsonIgnoreProperties("menuDishes")
     private Restaurant restaurant;
 
 

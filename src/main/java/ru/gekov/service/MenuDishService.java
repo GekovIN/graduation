@@ -18,6 +18,6 @@ public interface MenuDishService {
 
     MenuDish create(MenuDish menuDish, int dishId, int restaurantId);
 
-    boolean delete(int id);
+    void delete(int id);
 
 }

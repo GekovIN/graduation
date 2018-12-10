@@ -1,5 +1,7 @@
 package ru.gekov.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.List;
 public class MenuDishController {
 
     static final String REST_URL = "/menus";
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final MenuDishService menuService;
     private final RestaurantService restaurantService;
@@ -32,11 +35,13 @@ public class MenuDishController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MenuDish> getAllWithRestaurants() {
+        log.info("get all menuDishes");
         return menuService.getAll();
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MenuDish get(@PathVariable int id) {
+        log.info("get menuDish {}", id);
         return menuService.getById(id);
     }
 
@@ -46,6 +51,7 @@ public class MenuDishController {
     public List<DateMenuTo> getByDate(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                     @RequestParam("date") LocalDate date) {
 
+        log.info("get menuDishes by date {}", date);
         List<MenuDish> menuDishes = menuService.getAllByDate(date);
         return MenuDishUtil.getDateMenus(date, menuDishes);
     }
@@ -57,6 +63,7 @@ public class MenuDishController {
                                                @RequestParam("date") LocalDate date,
                                                @RequestParam("restaurantId") int restaurantId) {
 
+        log.info("get menuDishes by date {} and restaurant {}", date, restaurantId);
         List<MenuDish> menuDishes = menuService.getByDateAndRestaurantId(date, restaurantId);
         Restaurant restaurant;
         if (menuDishes.isEmpty()) {
@@ -70,6 +77,7 @@ public class MenuDishController {
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
+        log.info("delete menuDish {}", id);
         menuService.delete(id);
     }
 
@@ -80,6 +88,7 @@ public class MenuDishController {
                                @RequestParam("restaurantId") Integer restaurantId) {
         MenuDish menuDish = new MenuDish(id, date);
         if (menuDish.isNew()) {
+            log.info("create menuDish");
             menuService.create(menuDish, dishId, restaurantId);
         }
 

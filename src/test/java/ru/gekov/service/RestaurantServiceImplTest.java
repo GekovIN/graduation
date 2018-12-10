@@ -48,7 +48,7 @@ public class RestaurantServiceImplTest extends ServiceTest {
 
     @Test
     public void create() {
-        Restaurant savedRest = service.save(new Restaurant("New restaurant", "New address"));
+        Restaurant savedRest = service.create(new Restaurant("New restaurant", "New address"));
         Restaurant restaurant = service.get(savedRest.getId());
         assertMatch(restaurant, savedRest);
     }
@@ -57,7 +57,7 @@ public class RestaurantServiceImplTest extends ServiceTest {
     public void update() {
         Restaurant restaurant = service.get(EURO_REST_ID);
         restaurant.setName("Updated rest");
-        service.save(restaurant);
+        service.create(restaurant);
         Restaurant updatedRest = service.get(EURO_REST_ID);
         assertMatch(updatedRest, restaurant);
     }

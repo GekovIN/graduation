@@ -65,7 +65,7 @@ public class VoteServiceImpl implements VoteService {
         } else if (!voteOptional.isPresent()) {
             return create(dateTime.toLocalDate(), userId, restaurantId);
         } else {
-            throw new VotingTimeIsOutException();
+            throw new VotingTimeIsOutException("Vote time: " + VOTE_END_TIME + " is over.");
         }
     }
 

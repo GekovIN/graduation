@@ -1,5 +1,7 @@
 package ru.gekov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -19,6 +21,7 @@ public class Restaurant extends AbstractNamedEntity {
     private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonIgnoreProperties("restaurant")
     private List<MenuDish> menuDishes;
 
 
