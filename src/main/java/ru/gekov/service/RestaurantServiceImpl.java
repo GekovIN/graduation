@@ -62,7 +62,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public boolean delete(int id) {
-        return repository.delete(id) != 0;
+    public void delete(int id) {
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 }

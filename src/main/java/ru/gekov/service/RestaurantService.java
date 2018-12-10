@@ -16,6 +16,6 @@ public interface RestaurantService {
 
     Restaurant update(Restaurant restaurant);
     Restaurant create(Restaurant restaurant);
-    boolean delete(int id);
+    void delete(int id);
 
 }

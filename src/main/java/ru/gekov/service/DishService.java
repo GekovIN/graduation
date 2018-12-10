@@ -7,7 +7,8 @@ import java.util.List;
 public interface DishService {
 
     List<Dish> getAll();
-    Dish getById(int id);
-    Dish save(Dish dish);
-    boolean delete(int id);
+    Dish get(int id);
+    Dish create(Dish dish);
+    Dish update(Dish dish);
+    void delete(int id);
 }
