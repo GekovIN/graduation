@@ -27,13 +27,13 @@ public class UserServiceImplTest extends ServiceTest {
         assertMatch(user, USER_1);
     }
 
-    @Test
-    public void create() {
-        User newUser = new User("New User", "newmail@gmail.com", "newPassword", Role.ROLE_USER);
-        User saved = service.save(newUser);
-        User user = service.get(saved.getId());
-        assertMatch(user, saved);
-    }
+//    @Test
+//    public void create() {
+//        User newUser = new User("New User", "newmail@gmail.com", "newPassword", Role.ROLE_USER);
+//        User saved = service.save(newUser);
+//        User user = service.get(saved.getId());
+//        assertMatch(user, saved);
+//    }
 
     @Test
     public void delete() {

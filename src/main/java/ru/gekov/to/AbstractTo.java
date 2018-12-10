@@ -1,7 +1,8 @@
 package ru.gekov.to;
 
 public class AbstractTo {
-    private Integer id;
+
+    protected Integer id;
 
     public AbstractTo() {
     }
