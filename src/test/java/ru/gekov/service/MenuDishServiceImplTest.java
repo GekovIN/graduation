@@ -23,12 +23,12 @@ public class MenuDishServiceImplTest extends ServiceTest {
         assertMatch(all, ALL_MENU);
     }
 
-    @Test
-    public void getAllByDate() {
-        List<MenuDish> all = service.getAllByDate(LocalDate.of(2018, 10, 31));
-        MenuDishUtil.getDateMenus(LocalDate.of(2018, 10, 31), all);
-        assertMatch(all, EURO_MENU_2018_10_29);
-    }
+//    @Test
+//    public void getAllByDate() {
+//        List<MenuDish> all = service.getAllByDate(LocalDate.of(2018, 10, 31));
+//        MenuDishUtil.getDateMenus(LocalDate.of(2018, 10, 31), all);
+//        assertMatch(all, EURO_MENU_2018_10_29);
+//    }
 
     @Test
     public void getAllByRestaurantId() {
@@ -56,14 +56,14 @@ public class MenuDishServiceImplTest extends ServiceTest {
 //        assertMatch(dish, newMenuDish);
 //    }
 
-    @Test
-    public void update() {
-        MenuDish oldMenuDish = service.getById(EURO_MENU_DISH_1_ID);
-        MenuDish updated = new MenuDish(oldMenuDish.getId(), oldMenuDish.getDate(), THAI_DISH_1, THAI_REST);
-        service.update(oldMenuDish, THAI_DISH_1_ID, THAI_REST_ID);
-        MenuDish newMenuDish = service.getById(EURO_MENU_DISH_1_ID);
-        assertMatch(newMenuDish, updated);
-    }
+//    @Test
+//    public void update() {
+//        MenuDish oldMenuDish = service.getById(EURO_MENU_DISH_1_ID);
+//        MenuDish updated = new MenuDish(oldMenuDish.getId(), oldMenuDish.getDate(), THAI_DISH_1, THAI_REST);
+//        service.update(oldMenuDish, THAI_DISH_1_ID, THAI_REST_ID);
+//        MenuDish newMenuDish = service.getById(EURO_MENU_DISH_1_ID);
+//        assertMatch(newMenuDish, updated);
+//    }
 
     @Test
     public void delete() {

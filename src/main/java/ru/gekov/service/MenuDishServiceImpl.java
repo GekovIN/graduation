@@ -9,15 +9,15 @@ import ru.gekov.model.Restaurant;
 import ru.gekov.repository.DishRepository;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
-import ru.gekov.to.DateMenuTo;
+import ru.gekov.to.MenuDishTo;
+import ru.gekov.util.NotFoundException;
+import ru.gekov.util.ValidationUtil;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
+import static ru.gekov.util.ValidationUtil.*;
 import static ru.gekov.util.ValidationUtil.checkNew;
 import static ru.gekov.util.ValidationUtil.checkNotFoundWithId;
 
@@ -51,34 +51,26 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public List<MenuDish> getByDateAndRestaurantId(LocalDate date, int restaurantId) {
-        return menuDishRepository.findAllByDateAndRestaurantId(date, restaurantId);
-    }
-
-    @Override
     public MenuDish getById(int id) {
         return checkNotFoundWithId(menuDishRepository.findById(id).orElse(null), id);
     }
 
     @Override
-    public MenuDish update(MenuDish menuDish, int dishId, int restaurantId) {
-        Assert.notNull(menuDish, "Menu Dish must not be null");
-        Dish dish = dishRepository.getOne(dishId);
-        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
-        menuDish.setDish(dish);
-        menuDish.setRestaurant(restaurant);
-        return checkNotFoundWithId(menuDishRepository.save(menuDish), menuDish.getId());
+    public MenuDish update(MenuDishTo menuDishTo) {
+        Assert.notNull(menuDishTo, "Menu Dish must not be null");
+        Dish dish = dishRepository.getOne(menuDishTo.getDishId());
+        Restaurant restaurant = restaurantRepository.getOne(menuDishTo.getRestaurantId());
+        MenuDish menuDish = new MenuDish(menuDishTo.getId(), menuDishTo.getDate(), dish, restaurant);
+        return checkNotFoundWithId(menuDishRepository.save(menuDish), menuDishTo.getId());
     }
 
     @Override
-    public MenuDish create(MenuDish menuDish, int dishId, int restaurantId) {
-        Assert.notNull(menuDish, "Menu Dish must not be null");
-        checkNew(menuDish);
-        Dish dish = dishRepository.getOne(dishId);
-        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
-        menuDish.setDish(dish);
-        menuDish.setRestaurant(restaurant);
-        return menuDishRepository.save(menuDish);
+    public MenuDish create(MenuDishTo menuDishTo) {
+        Assert.notNull(menuDishTo, "Menu Dish must not be null");
+        checkNew(menuDishTo);
+        Dish dish = dishRepository.getOne(menuDishTo.getDishId());
+        Restaurant restaurant = restaurantRepository.getOne(menuDishTo.getRestaurantId());
+        return menuDishRepository.save(new MenuDish(menuDishTo.getDate(), dish, restaurant));
     }
 
     @Override

@@ -4,11 +4,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import ru.gekov.model.AbstractBaseEntity;
+import ru.gekov.to.AbstractTo;
+import ru.gekov.to.MenuDishTo;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 public class ValidationUtil {
+
+    public static <T> T checkNotFoundOptionalWithId(Optional<T> optional, int id) {
+        checkNotFoundWithId(optional.isPresent(), id);
+        return optional.get();
+    }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
         return checkNotFound(object, "id=" + id);
@@ -39,6 +47,13 @@ public class ValidationUtil {
     public static void checkNew(AbstractBaseEntity entity) {
         if (!entity.isNew()) {
             throw new IllegalArgumentException(entity + " must be new (id=null)");
+        }
+    }
+
+    public static void checkNew(AbstractTo to) {
+        if (!to.isNew()) {
+            throw new IllegalArgumentException(to + ", transfer object id must be null");
+
         }
     }
 
