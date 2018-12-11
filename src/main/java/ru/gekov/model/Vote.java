@@ -1,5 +1,7 @@
 package ru.gekov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -26,6 +28,7 @@ public class Vote extends AbstractBaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "RESTAURANT_ID")
+    @JsonIgnoreProperties("votes")
     @NotNull
     private Restaurant restaurant;
 

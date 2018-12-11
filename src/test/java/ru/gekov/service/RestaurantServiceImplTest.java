@@ -38,13 +38,13 @@ public class RestaurantServiceImplTest extends ServiceTest {
         MenuDishTestData.assertMatch(menuDishes, EURO_MENU_2018_10_29);
     }
 
-    @Test
-    public void getWithMenuDishesByIdAndDate() {
-        Restaurant restaurant = service.getWithMenuDishesByIdAndDate(THAI_REST_ID, LocalDate.of(2018, 10, 30));
-        List<MenuDish> menuDishes = restaurant.getMenuDishes();
-        assertMatch(restaurant, THAI_REST);
-        MenuDishTestData.assertMatch(menuDishes, THAI_MENU_2018_10_30);
-    }
+//    @Test
+//    public void getWithMenuDishesByIdAndDate() {
+//        Restaurant restaurant = service.getWithMenuDishesByIdAndDate(THAI_REST_ID, LocalDate.of(2018, 10, 30));
+//        List<MenuDish> menuDishes = restaurant.getMenuDishes();
+//        assertMatch(restaurant, THAI_REST);
+//        MenuDishTestData.assertMatch(menuDishes, THAI_MENU_2018_10_30);
+//    }
 
     @Test
     public void create() {

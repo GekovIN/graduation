@@ -1,6 +1,6 @@
 package ru.gekov.to;
 
-public class AbstractTo {
+public abstract class AbstractTo {
 
     protected Integer id;
 
