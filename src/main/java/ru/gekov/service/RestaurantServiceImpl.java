@@ -8,10 +8,10 @@ import ru.gekov.model.Restaurant;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.repository.VoteRepository;
+import ru.gekov.util.EntitiesUtil;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static ru.gekov.util.ValidationUtil.*;
 
@@ -49,21 +49,15 @@ public class RestaurantServiceImpl implements RestaurantService {
 //    https://stackoverflow.com/questions/36103442/hibernate-select-parents-with-list-of-childs-matches-child-parameter
 //    https://stackoverflow.com/questions/3585488/jpa-fetch-join-filter-on-list-set
 
-//    https://stackoverflow.com/questions/36174516/rest-api-dtos-or-not
     @Override
     public Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date) {
         List<MenuDish> menuDishes = menuRepository.findAllByDateAndRestaurantId(date, id);
         if (!menuDishes.isEmpty()) {
-//      Check that found restaurant id is matching required:
-            Restaurant restaurant = new Restaurant(menuDishes.get(0).getRestaurant());
-            restaurant.setMenuDishes(menuDishes);
-            return restaurant;
+            return EntitiesUtil.getRestaurantWithMenu(menuDishes.get(0).getRestaurant(), menuDishes, id);
         }
 //      Find restaurant from repository only if there was no menuDishes by this id and date:
         Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
-        restaurant = new Restaurant(restaurant);
-        restaurant.setMenuDishes(Collections.emptyList());
-        return restaurant;
+        return EntitiesUtil.getRestaurantWithMenu(restaurant, Collections.emptyList(), id);
     }
 
     @Override
@@ -73,18 +67,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (menuDishes.isEmpty())
             return Collections.emptyList();
 
-//        TODO move to util class
-
-        Map<Restaurant, List<MenuDish>> dishMap = new HashMap<>();
-        menuDishes.forEach(
-                m -> dishMap
-                        .computeIfAbsent(m.getRestaurant(), d -> new ArrayList<>())
-                        .add(m)
-        );
-        return dishMap.entrySet()
-                .stream()
-                .map(e -> new Restaurant(e.getKey(), e.getValue()))
-                .collect(Collectors.toList());
+        return EntitiesUtil.getRestaurantsWithMenu(menuDishes);
     }
 
     @Override

@@ -79,11 +79,11 @@ public class ValidationUtil {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
     }
-//
-//    public static <T extends AbstractTo> T checkIdMatch(T to, int id) {
-//        if (to.getId() != id) {
-//            throw new IllegalArgumentException(to + " expected to be with id=" + id);
-//        }
-//        return to;
-//    }
+
+    public static <T extends AbstractBaseEntity> T checkIdMatch(T entity, int id) {
+        if (entity.getId() != id) {
+            throw new IllegalArgumentException(entity + " expected to be with id=" + id);
+        }
+        return entity;
+    }
 }

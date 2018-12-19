@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
 import ru.gekov.to.UserTo;
-import ru.gekov.util.UserUtil;
+import ru.gekov.util.ToUtil;
 import ru.gekov.util.ValidationUtil;
 
 import javax.validation.Valid;
@@ -59,7 +59,7 @@ public class AdminController {
             return ValidationUtil.processBindingErrors(result);
         }
         if (userTo.isNew()) {
-            service.create(UserUtil.createNewFromTo(userTo));
+            service.create(ToUtil.createNewFromTo(userTo));
         } else {
             service.update(userTo, userTo.getId());
         }

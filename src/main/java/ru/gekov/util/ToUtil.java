@@ -4,7 +4,7 @@ import ru.gekov.model.Role;
 import ru.gekov.model.User;
 import ru.gekov.to.UserTo;
 
-public class UserUtil {
+public class ToUtil {
 
 
     public static User createNewFromTo(UserTo newUser) {

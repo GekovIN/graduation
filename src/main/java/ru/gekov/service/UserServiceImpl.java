@@ -7,7 +7,7 @@ import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
 import ru.gekov.util.NotFoundException;
-import ru.gekov.util.UserUtil;
+import ru.gekov.util.ToUtil;
 import ru.gekov.util.ValidationUtil;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optional = repository.findById(userTo.getId());
         User user = checkNotFoundOptionalWithId(optional, userTo.getId());
         ValidationUtil.assureIdConsistent(user, id);
-        repository.save(UserUtil.updateFromTo(user, userTo));
+        repository.save(ToUtil.updateFromTo(user, userTo));
     }
 
 
