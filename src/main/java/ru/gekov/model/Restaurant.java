@@ -1,6 +1,8 @@
 package ru.gekov.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import ru.gekov.web.json.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,6 +24,7 @@ public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonIgnoreProperties("restaurant")
+    @JsonView(View.JsonRestaurantsWithMenu.class)
     private List<MenuDish> menuDishes;
 
 
@@ -37,6 +40,19 @@ public class Restaurant extends AbstractNamedEntity {
     public Restaurant(String name, String address) {
         super(name);
         this.address = address;
+    }
+
+    public Restaurant(Restaurant restaurant) {
+        super(restaurant.getName());
+        this.id = restaurant.getId();
+        this.address = restaurant.getAddress();
+    }
+
+    public Restaurant(Restaurant restaurant, List<MenuDish> menuDishes) {
+        super(restaurant.getName());
+        this.id = restaurant.getId();
+        this.address = restaurant.getAddress();
+        setMenuDishes(menuDishes);
     }
 
     public String getAddress() {

@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    //Join menuDishes with dishes in one select:
     @Transactional
     @Query( "SELECT r FROM Restaurant r " +
             "LEFT JOIN FETCH r.menuDishes m " +
@@ -21,18 +20,21 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
             "WHERE r.id=?1" )
     Restaurant findByIdWithMenuDishes(int id);
 
-    @Transactional
-    @Query( "SELECT r FROM Restaurant r " +
-            "LEFT JOIN FETCH r.menuDishes m " +
-            "LEFT JOIN FETCH m.dish d " +
-            "WHERE r.id=?1 AND m.date=?2" )
-    Restaurant findByIdAndDateWithMenuDishes(int id, LocalDate date);
-
-    @Transactional
-    @Query( "SELECT DISTINCT r FROM Restaurant r " +
-            "JOIN FETCH r.menuDishes m " +
-            "JOIN FETCH m.dish WHERE m.date=?1" )
-    List<Restaurant> findByMenuDishesDate(LocalDate date);
+    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN r.menuDishes m WHERE m.date=?1")
+    List<Restaurant> findByDate(LocalDate date);
+//
+//    @Transactional
+//    @Query( "SELECT r FROM Restaurant r " +
+//            "LEFT JOIN FETCH r.menuDishes m " +
+//            "LEFT JOIN FETCH m.dish d " +
+//            "WHERE r.id=?1 AND m.date=?2" )
+//    Restaurant findByIdAndDateWithMenuDishes(int id, LocalDate date);
+//
+//    @Transactional
+//    @Query( "SELECT DISTINCT r FROM Restaurant r " +
+//            "JOIN FETCH r.menuDishes m " +
+//            "JOIN FETCH m.dish WHERE m.date=?1" )
+//    List<Restaurant> findByMenuDishesDate(LocalDate date);
 
     @Transactional
     @Modifying

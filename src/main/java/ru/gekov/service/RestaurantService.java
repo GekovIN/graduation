@@ -9,13 +9,12 @@ public interface RestaurantService {
 
     List<Restaurant> getAll();
     Restaurant get(Integer id);
+    List<Restaurant> getByDate(LocalDate date);
     Restaurant getWithMenuDishesById(int id);
     Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date);
-
     List<Restaurant> getWithMenuDishesByDate(LocalDate date);
 
     Restaurant update(Restaurant restaurant);
     Restaurant create(Restaurant restaurant);
     void delete(int id);
-
 }

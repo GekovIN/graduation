@@ -29,6 +29,8 @@ public class JacksonObjectMapper extends ObjectMapper {
         setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        setConfig(getSerializationConfig().withView(View.JsonMenuWithRestaurants.class));
     }
 
     public static ObjectMapper getMapper() {

@@ -1,19 +1,18 @@
 package ru.gekov.web;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import java.net.URI;
 import ru.gekov.model.Restaurant;
 import ru.gekov.service.RestaurantService;
 import ru.gekov.util.ValidationUtil;
+import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -48,14 +47,23 @@ public class RestaurantController {
         return service.get(id);
     }
 
+    //Get restaurants (without menuDishes) that have menu for date
     @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
-    public List<Restaurant> getAllByMenuDishDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+    public List<Restaurant> getHaveMenuByDate(@RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        log.info("get restaurants that have menu by date {}", date);
+        return service.getByDate(date);
+    }
+
+    @GetMapping(value = "/menus", params = "date", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithMenu.class)
+    public List<Restaurant> getAllWithMenuByDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
         log.info("get restaurants with menuDishes by date {}", date);
         return service.getWithMenuDishesByDate(date);
     }
 
     @GetMapping(value = "/{id}", params = "date", produces = APPLICATION_JSON_VALUE)
-    public Restaurant getByIdAndMenuDishDate(@PathVariable("id") Integer id,
+    @JsonView(View.JsonRestaurantsWithMenu.class)
+    public Restaurant getWithMenuByIdAndDate(@PathVariable("id") Integer id,
                                              @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
         log.info("get restaurant {} with menuDishes by date {}", id, date);
         return service.getWithMenuDishesByIdAndDate(id, date);

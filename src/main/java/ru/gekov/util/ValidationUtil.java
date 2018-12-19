@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import ru.gekov.model.AbstractBaseEntity;
 import ru.gekov.to.AbstractTo;
-import ru.gekov.to.MenuDishTo;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -80,4 +79,11 @@ public class ValidationUtil {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
     }
+//
+//    public static <T extends AbstractTo> T checkIdMatch(T to, int id) {
+//        if (to.getId() != id) {
+//            throw new IllegalArgumentException(to + " expected to be with id=" + id);
+//        }
+//        return to;
+//    }
 }
