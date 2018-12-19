@@ -23,6 +23,7 @@ public class Restaurant extends AbstractNamedEntity {
     private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OrderBy("date DESC")
     @JsonIgnoreProperties("restaurant")
     @JsonView(View.JsonRestaurantsWithMenu.class)
     private List<MenuDish> menuDishes;

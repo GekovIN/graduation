@@ -41,10 +41,24 @@ public class RestaurantController {
         return service.getAll();
     }
 
+    @GetMapping(value = "/menus", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithMenu.class)
+    public List<Restaurant> getAllWithMenuDishes() {
+        log.info("get all restaurants with menuDishes");
+        return service.getAllWithMenuDishes();
+    }
+
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public Restaurant getById(@PathVariable int id) {
         log.info("get restaurant {}", id);
         return service.get(id);
+    }
+
+    @GetMapping(value = "/{id}/menus", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithMenu.class)
+    public Restaurant getByIdWithAllMenus(@PathVariable int id) {
+        log.info("get restaurant {} with menuDishes");
+        return service.getWithMenuDishesById(id);
     }
 
     //Get restaurants (without menuDishes) that have menu for date
@@ -54,7 +68,7 @@ public class RestaurantController {
         return service.getByDate(date);
     }
 
-    @GetMapping(value = "/menus", params = "date", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenu.class)
     public List<Restaurant> getAllWithMenuByDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
         log.info("get restaurants with menuDishes by date {}", date);

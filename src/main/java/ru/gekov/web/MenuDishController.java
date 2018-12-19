@@ -30,11 +30,11 @@ public class MenuDishController {
         this.menuService = menuService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MenuDish> getAllWithRestaurants() {
-        log.info("get all menuDishes");
-        return menuService.getAll();
-    }
+//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<MenuDish> getAllWithRestaurants() {
+//        log.info("get all menuDishes");
+//        return menuService.getAll();
+//    }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MenuDish get(@PathVariable int id) {
