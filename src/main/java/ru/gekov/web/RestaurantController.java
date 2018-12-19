@@ -48,7 +48,7 @@ public class RestaurantController {
     }
 
     //Get restaurants (without menuDishes) that have menu for date
-    @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/haveMenu", params = "date", produces = APPLICATION_JSON_VALUE)
     public List<Restaurant> getHaveMenuByDate(@RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
         log.info("get restaurants that have menu by date {}", date);
         return service.getByDate(date);
