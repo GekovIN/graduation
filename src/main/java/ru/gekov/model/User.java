@@ -1,6 +1,9 @@
 package ru.gekov.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.util.CollectionUtils;
+import ru.gekov.web.json.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -28,16 +31,19 @@ public class User extends AbstractNamedEntity {
     @Column(name = "PASSWORD", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "REGISTERED", columnDefinition = "timestamp default now()")
     @NotNull
+    @JsonView(View.JsonProfile.class)
     private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"))
     @Column(name = "ROLE")
     @ElementCollection(fetch = FetchType.LAZY)
+    @JsonView(View.JsonProfile.class)
     private Set<Role> roles;
 
 
