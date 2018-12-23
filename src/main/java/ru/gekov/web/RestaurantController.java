@@ -71,8 +71,15 @@ public class RestaurantController {
     @GetMapping(value = "/{id}/menus", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenu.class)
     public Restaurant getByIdWithAllMenus(@PathVariable int id) {
-        log.info("get restaurant {} with menuDishes");
+        log.info("get restaurant {} with menuDishes", id);
         return service.getWithMenuDishesById(id);
+    }
+
+    @GetMapping(value = "/{id}/votes", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithVote.class)
+    public Restaurant getByIdWithAllVotes(@PathVariable int id) {
+        log.info("get restaurant {} with votes", id);
+        return service.getWithVotesById(id);
     }
 
     //Get restaurants (without menuDishes) that have menu for date

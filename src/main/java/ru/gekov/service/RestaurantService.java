@@ -15,6 +15,7 @@ public interface RestaurantService {
     Restaurant get(Integer id);
     List<Restaurant> getByDate(LocalDate date);
     Restaurant getWithMenuDishesById(int id);
+    Restaurant getWithVotesById(int id);
     Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date);
     List<Restaurant> getWithMenuDishesByDate(LocalDate date);
 
