@@ -10,6 +10,7 @@ public interface RestaurantService {
     List<Restaurant> getAll();
     List<Restaurant> getAllWithMenuDishes();
     List<Restaurant> getAllWithVotes();
+    List<Restaurant> getAllWithMenuDishesAndVotes();
 
     Restaurant get(Integer id);
     List<Restaurant> getByDate(LocalDate date);

@@ -3,10 +3,7 @@ package ru.gekov.util;
 import ru.gekov.model.MenuDish;
 import ru.gekov.model.Restaurant;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EntitiesUtil {
@@ -20,14 +17,14 @@ public class EntitiesUtil {
         );
         return dishMap.entrySet()
                 .stream()
-                .map(e -> new Restaurant(e.getKey(), e.getValue()))
+                .map(e -> new Restaurant(e.getKey(), new TreeSet<>(e.getValue())))
                 .collect(Collectors.toList());
     }
 
     public static Restaurant getRestaurantWithMenu(Restaurant restaurant, List<MenuDish> menuDishes, int restaurantId) {
 //      Check that found restaurant id is matching required:
         restaurant = ValidationUtil.checkIdMatch(new Restaurant(restaurant), restaurantId);
-        restaurant.setMenuDishes(menuDishes);
+        restaurant.setMenuDishes(new TreeSet<>(menuDishes));
         return restaurant;
     }
 }

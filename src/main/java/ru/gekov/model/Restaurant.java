@@ -6,7 +6,8 @@ import ru.gekov.web.json.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "RESTAURANTS")
@@ -26,13 +27,16 @@ public class Restaurant extends AbstractNamedEntity {
     @OrderBy("date DESC")
     @JsonIgnoreProperties("restaurant")
     @JsonView(View.JsonRestaurantsWithMenu.class)
-    private List<MenuDish> menuDishes;
+//    https://hibernate.atlassian.net/browse/HHH-1076
+//    https://stackoverflow.com/questions/9720452/duplicates-using-left-join-fetch
+    private Set<MenuDish> menuDishes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
     @JsonIgnoreProperties("restaurant")
     @JsonView(View.JsonRestaurantsWithVote.class)
-    private List<Vote> votes;
+//  https://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags
+    private Set<Vote> votes;
 
     public Restaurant() {
     }
@@ -54,7 +58,7 @@ public class Restaurant extends AbstractNamedEntity {
         this.address = restaurant.getAddress();
     }
 
-    public Restaurant(Restaurant restaurant, List<MenuDish> menuDishes) {
+    public Restaurant(Restaurant restaurant, Set<MenuDish> menuDishes) {
         super(restaurant.getName());
         this.id = restaurant.getId();
         this.address = restaurant.getAddress();
@@ -65,11 +69,13 @@ public class Restaurant extends AbstractNamedEntity {
         return address;
     }
 
-    public List<MenuDish> getMenuDishes() {
+    public Set<MenuDish> getMenuDishes() {
         return menuDishes;
     }
 
-    public void setMenuDishes(List<MenuDish> menuDishes) {
+    public void setMenuDishes(Set<MenuDish> menuDishes) {
+        if (menuDishes.isEmpty())
+            this.menuDishes = Collections.emptySet();
         this.menuDishes = menuDishes;
     }
 
