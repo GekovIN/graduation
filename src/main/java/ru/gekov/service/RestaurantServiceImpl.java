@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.gekov.model.MenuDish;
 import ru.gekov.model.Restaurant;
+import ru.gekov.model.Vote;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.repository.VoteRepository;
@@ -64,7 +65,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findByIdWithVotes(id), id);
     }
 
-//    Not using join fetch part of MenuDish child collection in one Select query to
+//    Not using join fetch part of child collection in one Select query to
 //    avoid problems with EM cache and because this is not allowed by JPA spec.
 //    https://stackoverflow.com/questions/36103442/hibernate-select-parents-with-list-of-childs-matches-child-parameter
 //    https://stackoverflow.com/questions/3585488/jpa-fetch-join-filter-on-list-set
@@ -78,6 +79,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 //      Find restaurant from repository only if there was no menuDishes by this id and date:
         Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
         return EntitiesUtil.getRestaurantWithMenu(restaurant, Collections.emptyList(), id);
+    }
+
+    @Override
+    public Restaurant getWithVotesByIdAndDate(int id, LocalDate date) {
+        List<Vote> votes = voteRepository.findByRestaurantIdAndDate(id, date);
+        if (!votes.isEmpty()) {
+            return EntitiesUtil.getRestaurantWithVotes(votes.get(0).getRestaurant(), votes, id);
+        }
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById((id)).orElse(null), id);
+        return EntitiesUtil.getRestaurantWithVotes(restaurant, Collections.emptyList(), id);
     }
 
     @Override

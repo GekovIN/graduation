@@ -96,12 +96,20 @@ public class RestaurantController {
         return service.getWithMenuDishesByDate(date);
     }
 
-    @GetMapping(value = "/{id}", params = "date", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/menus", params = "date", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenu.class)
     public Restaurant getWithMenuByIdAndDate(@PathVariable("id") Integer id,
                                              @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
         log.info("get restaurant {} with menuDishes by date {}", id, date);
         return service.getWithMenuDishesByIdAndDate(id, date);
+    }
+
+    @GetMapping(value = "/{id}/votes", params = "date", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithVote.class)
+    public Restaurant getWithVotesByIdAndDate(@PathVariable Integer id,
+                                              @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
+        log.info("get restaurant {} with votes by date {}", id, date);
+        return service.getWithVotesByIdAndDate(id, date);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -79,6 +79,16 @@ public class Restaurant extends AbstractNamedEntity {
         this.menuDishes = menuDishes;
     }
 
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        if (votes.isEmpty())
+            this.votes = Collections.emptySet();
+        this.votes = votes;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }
