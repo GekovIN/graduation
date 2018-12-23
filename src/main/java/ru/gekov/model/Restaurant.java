@@ -28,6 +28,11 @@ public class Restaurant extends AbstractNamedEntity {
     @JsonView(View.JsonRestaurantsWithMenu.class)
     private List<MenuDish> menuDishes;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OrderBy("date DESC")
+    @JsonIgnoreProperties("restaurant")
+    @JsonView(View.JsonRestaurantsWithVote.class)
+    private List<Vote> votes;
 
     public Restaurant() {
     }

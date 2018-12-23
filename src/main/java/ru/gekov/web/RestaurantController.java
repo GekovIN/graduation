@@ -48,6 +48,13 @@ public class RestaurantController {
         return service.getAllWithMenuDishes();
     }
 
+    @GetMapping(value = "/votes", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithVote.class)
+    public List<Restaurant> getAllWithVotes() {
+        log.info("get all restaurants with votes");
+        return service.getAllWithVotes();
+    }
+
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public Restaurant getById(@PathVariable int id) {
         log.info("get restaurant {}", id);

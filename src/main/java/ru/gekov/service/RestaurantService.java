@@ -8,8 +8,8 @@ import java.util.List;
 public interface RestaurantService {
 
     List<Restaurant> getAll();
-
     List<Restaurant> getAllWithMenuDishes();
+    List<Restaurant> getAllWithVotes();
 
     Restaurant get(Integer id);
     List<Restaurant> getByDate(LocalDate date);

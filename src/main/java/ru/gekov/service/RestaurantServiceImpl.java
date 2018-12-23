@@ -40,6 +40,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public List<Restaurant> getAllWithVotes() {
+        return restaurantRepository.findAllWithVotes();
+    }
+
+    @Override
     public Restaurant get(Integer id) {
         return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
