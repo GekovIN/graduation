@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import ru.gekov.model.Restaurant;
-import ru.gekov.model.Vote;
 import ru.gekov.service.RestaurantService;
 import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
@@ -125,6 +124,14 @@ public class RestaurantController {
                                               @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
         log.info("get restaurant {} with votes by date {}", id, date);
         return service.getWithVotesByIdAndDate(id, date);
+    }
+
+    @GetMapping(value = "/{id}/menus-and-votes", params = "date", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithMenuAndVotes.class)
+    public Restaurant getWithMenuAndVotesByIdAndDate(@PathVariable Integer id,
+                                                     @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
+        log.info("get restaurant {} with menuDishes and votes by date {}", id, date);
+        return service.getWithMenuDishesAndVotesByIdAndDate(id, date);
     }
 
     @DeleteMapping(value = "/{id}")

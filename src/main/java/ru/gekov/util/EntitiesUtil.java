@@ -53,4 +53,12 @@ public class EntitiesUtil {
         restaurant.setVotes(new LinkedHashSet<>(votes));
         return restaurant;
     }
+
+    public static Restaurant getRestaurantWithMenuAndVotes(Restaurant restaurant, List<MenuDish> menuDishes,
+                                                           List<Vote> votes, int restaurantId)  {
+        restaurant = ValidationUtil.checkIdMatch(new Restaurant(restaurant), restaurantId);
+        restaurant.setMenuDishes(new LinkedHashSet<>(menuDishes));
+        restaurant.setVotes(new LinkedHashSet<>(votes));
+        return restaurant;
+    }
 }

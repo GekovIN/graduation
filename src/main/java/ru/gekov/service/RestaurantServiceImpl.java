@@ -10,6 +10,7 @@ import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.repository.VoteRepository;
 import ru.gekov.util.EntitiesUtil;
+import ru.gekov.util.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -94,6 +95,33 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById((id)).orElse(null), id);
         return EntitiesUtil.getRestaurantWithVotes(restaurant, Collections.emptyList(), id);
+    }
+
+    @Override
+    public Restaurant getWithMenuDishesAndVotesByIdAndDate(int id, LocalDate date) {
+        Restaurant restaurant = null;
+
+        List<MenuDish> menuDishes = menuRepository.findAllByDateAndRestaurantId(date, id);
+        if (!menuDishes.isEmpty()) {
+            restaurant = menuDishes.get(0).getRestaurant();
+        } else {
+            menuDishes = Collections.emptyList();
+        }
+
+        List<Vote> votes = voteRepository.findByRestaurantIdAndDate(id, date);
+        if (!votes.isEmpty() && restaurant == null) {
+            restaurant = votes.get(0).getRestaurant();
+        } else if (votes.isEmpty()) {
+            votes = Collections.emptyList();
+        }
+
+        if (restaurant == null) {
+            restaurant = checkNotFoundWithId(restaurantRepository.findById((id)).orElse(null), id);
+        } else {
+            ValidationUtil.checkIdMatch(restaurant, id);
+        }
+
+        return EntitiesUtil.getRestaurantWithMenuAndVotes(restaurant, menuDishes, votes, id);
     }
 
     @Override

@@ -23,6 +23,8 @@ public interface RestaurantService {
 
     Restaurant getWithVotesByIdAndDate(int id, LocalDate date);
 
+    Restaurant getWithMenuDishesAndVotesByIdAndDate(int id, LocalDate date);
+
     List<Restaurant> getWithMenuDishesByDate(LocalDate date);
 
     List<Restaurant> getWithVotesByDate(LocalDate date);
