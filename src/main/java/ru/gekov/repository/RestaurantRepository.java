@@ -48,6 +48,14 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
             "WHERE r.id=?1" )
     Restaurant findByIdWithVotes(int id);
 
+    @Transactional
+    @Query("SELECT DISTINCT r FROM Restaurant r " +
+            "LEFT JOIN FETCH r.menuDishes m " +
+            "LEFT JOIN FETCH m.dish " +
+            "LEFT JOIN FETCH r.votes v " +
+            "LEFT JOIN FETCH v.user WHERE r.id=?1")
+    Restaurant findByIdWithMenuDishesAndVotes(int id);
+
     @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN r.menuDishes m WHERE m.date=?1")
     List<Restaurant> findByDate(LocalDate date);
 //

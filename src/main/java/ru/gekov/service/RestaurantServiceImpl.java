@@ -65,6 +65,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findByIdWithVotes(id), id);
     }
 
+    @Override
+    public Restaurant getWithMenuDishesAndVotesById(int id) {
+        return checkNotFoundWithId(restaurantRepository.findByIdWithMenuDishesAndVotes(id), id);
+    }
+
 //    Not using join fetch part of child collection in one Select query to
 //    avoid problems with EM cache and because this is not allowed by JPA spec.
 //    https://stackoverflow.com/questions/36103442/hibernate-select-parents-with-list-of-childs-matches-child-parameter
