@@ -22,6 +22,8 @@ public interface RestaurantService {
 
     List<Restaurant> getWithMenuDishesByDate(LocalDate date);
 
+    List<Restaurant> getWithVotesByDate(LocalDate date);
+
     Restaurant update(Restaurant restaurant);
     Restaurant create(Restaurant restaurant);
     void delete(int id);

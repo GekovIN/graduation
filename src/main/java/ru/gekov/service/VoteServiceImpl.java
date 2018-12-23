@@ -44,7 +44,7 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public List<Vote> getByDate(LocalDate date) {
-        return voteRepository.findByDate(date);
+        return voteRepository.findAllByDate(date);
     }
 
     @Override

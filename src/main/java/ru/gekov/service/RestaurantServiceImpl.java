@@ -102,6 +102,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public List<Restaurant> getWithVotesByDate(LocalDate date) {
+        List<Vote> votes = voteRepository.findAllByDate(date);
+        if (votes.isEmpty())
+            return Collections.emptyList();
+
+        return EntitiesUtil.getRestaurantsWithVotes(votes);
+    }
+
+    @Override
     public Restaurant update(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
         return checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.getId());

@@ -23,7 +23,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     Optional<Vote> findById(Integer integer);
 
     @EntityGraph(attributePaths = {"user", "restaurant"})
-    List<Vote> findByDate(LocalDate date);
+    List<Vote> findAllByDate(LocalDate date);
 
     @EntityGraph(attributePaths = {"user", "restaurant"})
     List<Vote> findByRestaurantIdAndDate(int restaurantId, LocalDate date);

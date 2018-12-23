@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import ru.gekov.model.Restaurant;
+import ru.gekov.model.Vote;
 import ru.gekov.service.RestaurantService;
 import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
@@ -89,11 +90,18 @@ public class RestaurantController {
         return service.getByDate(date);
     }
 
-    @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/menus", params = "date", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenu.class)
     public List<Restaurant> getAllWithMenuByDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
         log.info("get restaurants with menuDishes by date {}", date);
         return service.getWithMenuDishesByDate(date);
+    }
+
+    @GetMapping(value = "/votes", params = "date", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonRestaurantsWithVote.class)
+    public List<Restaurant> getAllWithVotesByDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        log.info("get restaurants with votes by date {}", date);
+        return service.getWithVotesByDate(date);
     }
 
     @GetMapping(value = "/{id}/menus", params = "date", produces = APPLICATION_JSON_VALUE)
