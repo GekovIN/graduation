@@ -9,6 +9,7 @@ import ru.gekov.model.Vote;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.repository.VoteRepository;
+import ru.gekov.to.RestaurantVoteCountTo;
 import ru.gekov.util.EntitiesUtil;
 import ru.gekov.util.ValidationUtil;
 
@@ -95,6 +96,13 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById((id)).orElse(null), id);
         return EntitiesUtil.getRestaurantWithVotes(restaurant, Collections.emptyList(), id);
+    }
+
+    @Override
+    public RestaurantVoteCountTo getWithVotesCountByIdAndDate(int id, LocalDate date) {
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById((id)).orElse(null), id);
+        Long voteCount = voteRepository.countAllByRestaurantIdAndDate(id, date);
+        return new RestaurantVoteCountTo(date, restaurant, voteCount);
     }
 
     @Override

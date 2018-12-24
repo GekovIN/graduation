@@ -1,6 +1,7 @@
 package ru.gekov.service;
 
 import ru.gekov.model.Restaurant;
+import ru.gekov.to.RestaurantVoteCountTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +23,8 @@ public interface RestaurantService {
     Restaurant getWithMenuDishesByIdAndDate(int id, LocalDate date);
 
     Restaurant getWithVotesByIdAndDate(int id, LocalDate date);
+
+    RestaurantVoteCountTo getWithVotesCountByIdAndDate(int id, LocalDate date);
 
     Restaurant getWithMenuDishesAndVotesByIdAndDate(int id, LocalDate date);
 

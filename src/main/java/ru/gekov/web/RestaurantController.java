@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import ru.gekov.model.Restaurant;
 import ru.gekov.service.RestaurantService;
+import ru.gekov.to.RestaurantVoteCountTo;
 import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
 
@@ -132,6 +133,12 @@ public class RestaurantController {
                                                      @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
         log.info("get restaurant {} with menuDishes and votes by date {}", id, date);
         return service.getWithMenuDishesAndVotesByIdAndDate(id, date);
+    }
+
+    @GetMapping(value = "/{id}/votes-count", params = "date", produces = APPLICATION_JSON_VALUE)
+    public RestaurantVoteCountTo getWithVotesCountByIdAndDate(@PathVariable Integer id,
+                                                              @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
+        return service.getWithVotesCountByIdAndDate(id, date);
     }
 
     @DeleteMapping(value = "/{id}")
