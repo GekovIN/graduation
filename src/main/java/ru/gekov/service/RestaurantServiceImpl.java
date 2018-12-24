@@ -15,6 +15,7 @@ import ru.gekov.util.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ru.gekov.util.ValidationUtil.*;
 
@@ -55,6 +56,21 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Restaurant get(Integer id) {
         return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
+    }
+
+//  Find only restaurants that have menu for this date
+    @Override
+    public List<Restaurant> getByMenuDate(LocalDate menuDate) {
+        return restaurantRepository.findByDate(menuDate);
+    }
+
+    @Override
+    public List<RestaurantVoteCountTo> getWithVotesCountByDate(LocalDate date) {
+        List<Restaurant> restaurants = getByMenuDate(date);
+        return restaurants
+                .stream()
+                .map(r -> new RestaurantVoteCountTo(date, r, voteRepository.countAllByRestaurantIdAndDate(r.getId(), date)))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -169,8 +185,4 @@ public class RestaurantServiceImpl implements RestaurantService {
         checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
 
-    @Override
-    public List<Restaurant> getByDate(LocalDate date) {
-        return restaurantRepository.findByDate(date);
-    }
 }
