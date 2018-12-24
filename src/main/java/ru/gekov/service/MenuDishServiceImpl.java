@@ -57,16 +57,27 @@ public class MenuDishServiceImpl implements MenuDishService {
 
     @Override
     public MenuDish update(MenuDishTo menuDishTo) {
-        Assert.notNull(menuDishTo, "Menu Dish must not be null");
+        Assert.notNull(menuDishTo, "menuDishTo must not be null");
+        Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
+        Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
+        Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
+
+        MenuDish menuDish = getById(menuDishTo.getId());
         Dish dish = dishRepository.getOne(menuDishTo.getDishId());
         Restaurant restaurant = restaurantRepository.getOne(menuDishTo.getRestaurantId());
-        MenuDish menuDish = new MenuDish(menuDishTo.getId(), menuDishTo.getDate(), dish, restaurant);
-        return checkNotFoundWithId(menuDishRepository.save(menuDish), menuDishTo.getId());
+        menuDish.setDish(dish);
+        menuDish.setRestaurant(restaurant);
+        menuDish.setDate(menuDishTo.getDate());
+        return menuDishRepository.save(menuDish);
     }
 
     @Override
     public MenuDish create(MenuDishTo menuDishTo) {
         Assert.notNull(menuDishTo, "Menu Dish must not be null");
+        Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
+        Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
+        Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
+
         checkNew(menuDishTo);
         Dish dish = dishRepository.getOne(menuDishTo.getDishId());
         Restaurant restaurant = restaurantRepository.getOne(menuDishTo.getRestaurantId());

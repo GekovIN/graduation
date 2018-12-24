@@ -16,11 +16,13 @@ import ru.gekov.util.ValidationUtil;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.MediaType.*;
+
 @RestController
 @RequestMapping(MenuDishController.REST_URL)
 public class MenuDishController {
 
-    static final String REST_URL = "/restaurants/menus";
+    static final String REST_URL = "/menus";
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final MenuDishService menuService;
@@ -30,13 +32,13 @@ public class MenuDishController {
         this.menuService = menuService;
     }
 
-//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<MenuDish> getAllWithRestaurants() {
-//        log.info("get all menuDishes");
-//        return menuService.getAll();
-//    }
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public List<MenuDish> getAll() {
+        log.info("get all menuDishes");
+        return menuService.getAll();
+    }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public MenuDish get(@PathVariable int id) {
         log.info("get menuDish {}", id);
         return menuService.getById(id);
