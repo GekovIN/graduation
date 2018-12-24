@@ -3,6 +3,7 @@ package ru.gekov.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import ru.gekov.to.MenuDishTo;
 import ru.gekov.util.ValidationUtil;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.http.MediaType.*;
@@ -42,6 +44,12 @@ public class MenuDishController {
     public MenuDish get(@PathVariable int id) {
         log.info("get menuDish {}", id);
         return menuService.getById(id);
+    }
+
+    @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
+    public List<MenuDish> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("get menuDishes by {}", date);
+        return menuService.getAllByDate(date);
     }
 
     @DeleteMapping(path = "/{id}")
