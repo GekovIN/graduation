@@ -61,8 +61,7 @@ public class VoteServiceImpl implements VoteService {
     public Vote save(LocalDateTime dateTime, int userId, int restaurantId) {
         Optional<Vote> voteOptional = voteRepository.findByUserIdAndDate(userId, dateTime.toLocalDate());
         if (voteOptional.isPresent()
-                && dateTime.toLocalTime().isBefore(VOTE_END_TIME)
-                && dateTime.toLocalDate().equals(LocalDate.now())) {
+                && dateTime.toLocalTime().isBefore(VOTE_END_TIME)) {
             return update(voteOptional.get(), restaurantId);
         } else if (!voteOptional.isPresent()) {
             return create(dateTime.toLocalDate(), userId, restaurantId);

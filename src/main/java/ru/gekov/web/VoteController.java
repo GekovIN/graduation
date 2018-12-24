@@ -3,7 +3,7 @@ package ru.gekov.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.gekov.model.Vote;
 import ru.gekov.service.VoteService;
@@ -13,10 +13,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.format.annotation.DateTimeFormat.*;
+import static org.springframework.http.MediaType.*;
+
 @RestController
 public class VoteController {
-
-    static final String REST_URL = "/votes";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -27,17 +28,25 @@ public class VoteController {
         this.service = service;
     }
 
-    @GetMapping(value = "/admin/votes", produces = MediaType.APPLICATION_JSON_VALUE)
+    //TODO admin
+    @GetMapping(value = "/votes", produces = APPLICATION_JSON_VALUE)
     public List<Vote> getAll() {
         log.info("get all votes");
         return service.getAll();
     }
 
-    //Get current date vote for authorized user
-    @GetMapping(value = "/profile/vote", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Vote getCurrentDateProfileVote() {
-        log.info("get current date profile vote");
-        return service.getByUserAndDate(SecurityUtil.authUserId(), LocalDate.now());
+    //TODO auth. user
+    @GetMapping(value = "/profile/vote", params = "date", produces = APPLICATION_JSON_VALUE)
+    public Vote getProfileVoteByDate(@RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        log.info("get profile vote by date {}", date);
+        return service.getByUserAndDate(SecurityUtil.authUserId(), date);
+    }
+
+    //TODO admin
+    @GetMapping(value = "/users/{userId}/vote", params = "date", produces = APPLICATION_JSON_VALUE)
+    public Vote getVoteByUserIdAndDate(@PathVariable Integer userId, @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        log.info("get vote by user {} and date {}", userId, date);
+        return service.getByUserAndDate(userId, date);
     }
 
     //  Vote for restaurant by authorized user
@@ -55,18 +64,5 @@ public class VoteController {
         log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
         service.save(LocalDateTime.of(2018, 12, 11, 10, 0), 100000, restaurantId);
     }
-
-//    @GetMapping(params = "date", value = "/restaurant/{id}/votes/number/by")
-//    public VoteNumberTo getNumberByRestaurantAndDate(@PathVariable("id") Integer restaurantId,
-//                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-//                                                     @RequestParam("date") LocalDate date) {
-//        log.info("get number of votes by restaurant with id={} and date={}", restaurantId, date);
-//        return service.getNumberByRestaurantAndDate(restaurantId, date);
-//    }
-
-//    @GetMapping(value = "/restaurant/{id}/votes")
-//    public Restaurant getByRestaurant(@PathVariable Integer restaurantId) {
-//
-//    }
 
 }
