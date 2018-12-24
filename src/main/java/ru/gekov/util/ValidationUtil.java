@@ -2,9 +2,11 @@ package ru.gekov.util;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import ru.gekov.model.AbstractBaseEntity;
 import ru.gekov.to.AbstractTo;
+import ru.gekov.to.MenuDishTo;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -85,5 +87,12 @@ public class ValidationUtil {
             throw new IllegalArgumentException(entity + " expected to be with id=" + id);
         }
         return entity;
+    }
+
+    public static void validateMenuDishTo(MenuDishTo menuDishTo) {
+        Assert.notNull(menuDishTo, "menuDishTo must not be null");
+        Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
+        Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
+        Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
     }
 }

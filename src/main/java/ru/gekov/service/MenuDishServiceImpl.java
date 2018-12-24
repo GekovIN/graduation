@@ -2,7 +2,6 @@ package ru.gekov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import ru.gekov.model.Dish;
 import ru.gekov.model.MenuDish;
 import ru.gekov.model.Restaurant;
@@ -10,14 +9,11 @@ import ru.gekov.repository.DishRepository;
 import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.to.MenuDishTo;
-import ru.gekov.util.NotFoundException;
 import ru.gekov.util.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-import static ru.gekov.util.ValidationUtil.*;
 import static ru.gekov.util.ValidationUtil.checkNew;
 import static ru.gekov.util.ValidationUtil.checkNotFoundWithId;
 
@@ -57,10 +53,7 @@ public class MenuDishServiceImpl implements MenuDishService {
 
     @Override
     public MenuDish update(MenuDishTo menuDishTo) {
-        Assert.notNull(menuDishTo, "menuDishTo must not be null");
-        Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
-        Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
-        Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
+        ValidationUtil.validateMenuDishTo(menuDishTo);
 
         MenuDish menuDish = getById(menuDishTo.getId());
         Dish dish = dishRepository.getOne(menuDishTo.getDishId());
@@ -73,10 +66,7 @@ public class MenuDishServiceImpl implements MenuDishService {
 
     @Override
     public MenuDish create(MenuDishTo menuDishTo) {
-        Assert.notNull(menuDishTo, "Menu Dish must not be null");
-        Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
-        Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
-        Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
+        ValidationUtil.validateMenuDishTo(menuDishTo);
 
         checkNew(menuDishTo);
         Dish dish = dishRepository.getOne(menuDishTo.getDishId());
