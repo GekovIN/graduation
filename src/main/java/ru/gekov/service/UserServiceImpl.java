@@ -6,7 +6,6 @@ import org.springframework.util.Assert;
 import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
-import ru.gekov.util.NotFoundException;
 import ru.gekov.util.ToUtil;
 import ru.gekov.util.ValidationUtil;
 
@@ -31,14 +30,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User get(int id) throws NotFoundException {
+    public User get(int id) {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     @Override
-    public User getByEmail(String email) throws NotFoundException {
+    public User getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
         return checkNotFound(repository.getByEmail(email), "email=" + email);
+    }
+
+    @Override
+    public User getWithVotes(int id) {
+        return checkNotFoundWithId(repository.findByIdWithVotes(id), id);
     }
 
     @Override
@@ -48,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int id) throws NotFoundException {
+    public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 

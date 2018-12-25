@@ -11,6 +11,8 @@ public interface UserService {
     User get(int id);
     void delete(int id);
 
+    User getWithVotes(int id);
+
     User create(User user);
     void update(UserTo userTo, int id);
 

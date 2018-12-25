@@ -24,7 +24,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAll();
 
     @Transactional
+    @Query("SELECT u FROM User u " +
+            "LEFT JOIN FETCH u.votes v " +
+            "LEFT JOIN FETCH v.restaurant " +
+            "WHERE u.id=?1")
+    User findByIdWithVotes(int id);
+
+    @Transactional
     @Modifying
-    @Query("DELETE FROM User u WHERE u.id=:id")
-    int delete(@Param("id") int id);
+    @Query("DELETE FROM User u WHERE u.id=?1")
+    int delete(int id);
 }

@@ -1,15 +1,17 @@
 package ru.gekov.web;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
 import ru.gekov.to.UserTo;
+import ru.gekov.web.json.View;
 
+import static org.springframework.http.MediaType.*;
 import static ru.gekov.util.SecurityUtil.authUserId;
 
 @RestController
@@ -25,10 +27,17 @@ public class ProfileController {
         this.service = service;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public User get() {
         log.info("get user with id=", authUserId());
         return service.get(authUserId());
+    }
+
+    @GetMapping(value = "/votes", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonUserWithVotes.class)
+    public User getWithVotes() {
+        log.info("get user {} with all votes", authUserId());
+        return service.getWithVotes(authUserId());
     }
 
     @DeleteMapping
@@ -38,7 +47,7 @@ public class ProfileController {
         service.delete(authUserId());
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@RequestBody UserTo userTo) {
         log.info("update user with id=", authUserId());

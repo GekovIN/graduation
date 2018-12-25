@@ -1,5 +1,6 @@
 package ru.gekov.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.util.CollectionUtils;
@@ -46,6 +47,11 @@ public class User extends AbstractNamedEntity {
     @JsonView(View.JsonProfile.class)
     private Set<Role> roles;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("date DESC")
+    @JsonIgnoreProperties("user")
+    @JsonView(View.JsonUserWithVotes.class)
+    private Set<Vote> votes;
 
     public User() {
     }
