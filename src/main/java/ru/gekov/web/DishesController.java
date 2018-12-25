@@ -22,9 +22,9 @@ public class DishesController {
     static final String REST_URL = "/dishes";
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Autowired
     private final DishService service;
 
+    @Autowired
     public DishesController(DishService service) {
         this.service = service;
     }
