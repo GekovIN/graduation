@@ -1,5 +1,6 @@
 package ru.gekov.web;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import ru.gekov.service.UserService;
 import ru.gekov.to.UserTo;
 import ru.gekov.util.ToUtil;
 import ru.gekov.util.ValidationUtil;
+import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.MediaType.*;
 import static ru.gekov.util.SecurityUtil.authUserId;
 
 @RestController
@@ -34,13 +37,20 @@ public class AdminController {
         this.service = service;
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public User get(@PathVariable Integer id) {
         log.info("get user with id=", authUserId());
         return service.get(id);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/votes", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonUserWithVotes.class)
+    public User getByIdWithVotes(@PathVariable Integer id) {
+        log.info("get user {} with all votes", id);
+        return service.getWithVotes(id);
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     public List<User> getAll() {
         log.info("get all users");
         return service.getAll();
