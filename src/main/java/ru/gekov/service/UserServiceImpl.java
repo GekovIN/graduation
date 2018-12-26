@@ -1,8 +1,12 @@
 package ru.gekov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.gekov.AuthorizedUser;
 import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
@@ -14,8 +18,8 @@ import java.util.Optional;
 
 import static ru.gekov.util.ValidationUtil.*;
 
-@Service
-public class UserServiceImpl implements UserService {
+@Service("userService")
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository repository;
 
@@ -64,5 +68,12 @@ public class UserServiceImpl implements UserService {
         repository.save(ToUtil.updateFromTo(user, userTo));
     }
 
-
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = getByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " not found");
+        }
+        return new AuthorizedUser(user);
+    }
 }

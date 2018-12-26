@@ -35,6 +35,9 @@ public class User extends AbstractNamedEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
+    private boolean enabled = true;
+
     @Column(name = "REGISTERED", columnDefinition = "timestamp default now()")
     @NotNull
     @JsonView(View.JsonProfile.class)
@@ -43,7 +46,7 @@ public class User extends AbstractNamedEntity {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"))
     @Column(name = "ROLE")
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @JsonView(View.JsonProfile.class)
     private Set<Role> roles;
 
@@ -61,19 +64,21 @@ public class User extends AbstractNamedEntity {
         this.email = email;
         this.password = password;
         this.registered = new Date();
+        this.enabled = true;
         setRoles(EnumSet.of(role, roles));
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, new Date(), EnumSet.of(role, roles));
+        this(id, name, email, password, true, new Date(), EnumSet.of(role, roles));
     }
 
-    public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, boolean enabled, Date registered, Collection<Role> roles) {
         super(name);
         this.id = id;
         this.email = email;
         this.password = password;
         this.registered = registered;
+        this.enabled = enabled;
         setRoles(roles);
     }
 
@@ -116,5 +121,14 @@ public class User extends AbstractNamedEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
