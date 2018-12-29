@@ -7,20 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.gekov.AuthorizedUser;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
 import ru.gekov.to.UserTo;
-import ru.gekov.util.ToUtil;
-import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
 import java.net.URI;
 
 import static org.springframework.http.MediaType.*;
-import static ru.gekov.util.SecurityUtil.authUserId;
 import static ru.gekov.util.ToUtil.*;
 import static ru.gekov.util.ValidationUtil.*;
 
@@ -39,23 +38,26 @@ public class ProfileController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
-    public User get() {
-        log.info("get user with id=", authUserId());
-        return service.get(authUserId());
+    public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
+        int id = authUser.getId();
+        log.info("get user with id=", id);
+        return service.get(id);
     }
 
     @GetMapping(value = "/votes", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonUserWithVotes.class)
-    public User getWithVotes() {
-        log.info("get user {} with all votes", authUserId());
-        return service.getWithVotes(authUserId());
+    public User getWithVotes(@AuthenticationPrincipal AuthorizedUser authUser) {
+        int id = authUser.getId();
+        log.info("get user {} with all votes", id);
+        return service.getWithVotes(id);
     }
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete() {
-        log.info("delete user with id=", authUserId());
-        service.delete(authUserId());
+    public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
+        int id = authUser.getId();
+        log.info("delete user with id=", id);
+        service.delete(id);
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -73,9 +75,11 @@ public class ProfileController {
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo) {
-        log.info("update user with id=", authUserId());
-        service.update(userTo, authUserId());
+    public void update(@RequestBody UserTo userTo,
+                       @AuthenticationPrincipal AuthorizedUser authUser) {
+        int id = authUser.getId();
+        log.info("update user with id=", id);
+        service.update(userTo, id);
     }
 
     @GetMapping(value = "/text")

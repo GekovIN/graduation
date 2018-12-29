@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
-import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
@@ -18,7 +17,6 @@ import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.MediaType.*;
-import static ru.gekov.util.SecurityUtil.authUserId;
 import static ru.gekov.util.ValidationUtil.*;
 
 @RestController
@@ -39,7 +37,7 @@ public class AdminController {
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
     public User get(@PathVariable Integer id) {
-        log.info("get user with id=", authUserId());
+        log.info("get user with id=", id);
         return service.get(id);
     }
 
