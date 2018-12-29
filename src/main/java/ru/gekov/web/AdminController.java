@@ -60,6 +60,7 @@ public class AdminController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
     public ResponseEntity<User> createWithUri(@Valid @RequestBody User user) {
+        log.info("create {}", user);
         checkNew(user);
         User created = service.create(user);
         URI newResourceUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -72,6 +73,7 @@ public class AdminController {
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody User user, @PathVariable Integer id) {
+        log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
         service.update(user);
     }
