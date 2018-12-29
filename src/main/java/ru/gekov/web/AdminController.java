@@ -6,16 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
-import ru.gekov.to.UserTo;
-import ru.gekov.util.ToUtil;
-import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.MediaType.*;
@@ -55,6 +53,18 @@ public class AdminController {
         return service.getAll();
     }
 
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonProfile.class)
+    public ResponseEntity<User> createWithUri(@Valid @RequestBody User user) {
+
+        User created = service.create(user);
+        URI newResourceUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+
+        return ResponseEntity.created(newResourceUri).body(created);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
@@ -62,16 +72,4 @@ public class AdminController {
         service.delete(id);
     }
 
-    @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
-        if (result.hasErrors()) {
-            return ValidationUtil.processBindingErrors(result);
-        }
-        if (userTo.isNew()) {
-            service.create(ToUtil.createNewFromTo(userTo));
-        } else {
-            service.update(userTo, userTo.getId());
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
