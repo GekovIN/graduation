@@ -1,7 +1,10 @@
 package ru.gekov.util;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import ru.gekov.model.MenuDish;
 import ru.gekov.model.Restaurant;
+import ru.gekov.model.User;
 import ru.gekov.model.Vote;
 
 import java.util.*;
@@ -60,5 +63,12 @@ public class EntitiesUtil {
         restaurant.setMenuDishes(new LinkedHashSet<>(menuDishes));
         restaurant.setVotes(new LinkedHashSet<>(votes));
         return restaurant;
+    }
+
+    public static User prepareUserToSave(User user, PasswordEncoder passwordEncoder) {
+        String password = user.getPassword();
+        user.setPassword(StringUtils.isEmpty(password) ? password : passwordEncoder.encode(password));
+        user.setEmail(user.getEmail().toLowerCase());
+        return user;
     }
 }

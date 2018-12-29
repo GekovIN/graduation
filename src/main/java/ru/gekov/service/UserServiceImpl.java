@@ -1,31 +1,35 @@
 package ru.gekov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.gekov.AuthorizedUser;
 import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
+import ru.gekov.util.EntitiesUtil;
 import ru.gekov.util.ToUtil;
 import ru.gekov.util.ValidationUtil;
 
 import java.util.List;
 import java.util.Optional;
 
+import static ru.gekov.util.EntitiesUtil.*;
 import static ru.gekov.util.ValidationUtil.*;
 
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
-        return repository.save(user);
+        return repository.save(prepareUserToSave(user, passwordEncoder));
     }
 
     @Override
@@ -65,7 +69,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<User> optional = repository.findById(userTo.getId());
         User user = checkNotFoundOptionalWithId(optional, userTo.getId());
         ValidationUtil.assureIdConsistent(user, id);
-        repository.save(ToUtil.updateFromTo(user, userTo));
+        User user1 = ToUtil.updateFromTo(user, userTo);
+        repository.save(prepareUserToSave(user1, passwordEncoder));
     }
 
     @Override
