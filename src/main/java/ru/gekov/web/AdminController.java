@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
+import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.*;
 import static ru.gekov.util.SecurityUtil.authUserId;
+import static ru.gekov.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(value = AdminController.REST_URL)
@@ -35,6 +37,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonProfile.class)
     public User get(@PathVariable Integer id) {
         log.info("get user with id=", authUserId());
         return service.get(id);
@@ -48,6 +51,7 @@ public class AdminController {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @JsonView(View.JsonProfile.class)
     public List<User> getAll() {
         log.info("get all users");
         return service.getAll();
@@ -56,13 +60,20 @@ public class AdminController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
     public ResponseEntity<User> createWithUri(@Valid @RequestBody User user) {
-
+        checkNew(user);
         User created = service.create(user);
         URI newResourceUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(newResourceUri).body(created);
+    }
+
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody User user, @PathVariable Integer id) {
+        assureIdConsistent(user, id);
+        service.update(user);
     }
 
     @DeleteMapping("/{id}")

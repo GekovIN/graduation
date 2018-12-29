@@ -10,7 +10,6 @@ import ru.gekov.AuthorizedUser;
 import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
-import ru.gekov.util.EntitiesUtil;
 import ru.gekov.util.ToUtil;
 import ru.gekov.util.ValidationUtil;
 
@@ -65,12 +64,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public void update(User user) {
+        Assert.notNull(user, "user must not be null");
+        checkNotFoundWithId(repository.save(prepareUserToSave(user, passwordEncoder)), user.getId());
+    }
+
+    @Override
     public void update(UserTo userTo, int id) {
-        Optional<User> optional = repository.findById(userTo.getId());
-        User user = checkNotFoundOptionalWithId(optional, userTo.getId());
-        ValidationUtil.assureIdConsistent(user, id);
-        User user1 = ToUtil.updateFromTo(user, userTo);
-        repository.save(prepareUserToSave(user1, passwordEncoder));
+        User user = ToUtil.updateFromTo(get(userTo.getId()), userTo);
+        repository.save(prepareUserToSave(user, passwordEncoder));
     }
 
     @Override
