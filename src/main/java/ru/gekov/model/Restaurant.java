@@ -2,6 +2,7 @@ package ru.gekov.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.validator.constraints.SafeHtml;
 import ru.gekov.web.json.View;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Restaurant extends AbstractNamedEntity {
 
     @Column(name = "address")
     @NotBlank
+    @SafeHtml
     private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")

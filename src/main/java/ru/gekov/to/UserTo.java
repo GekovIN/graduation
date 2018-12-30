@@ -1,5 +1,7 @@
 package ru.gekov.to;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -16,6 +18,7 @@ public class UserTo extends AbstractTo implements Serializable {
     @Email
     @NotBlank
     @Size(max = 100)
+    @SafeHtml
     private String email;
 
     @Size(min = 5, max = 32, message = "length must between 5 and 32 characters")
