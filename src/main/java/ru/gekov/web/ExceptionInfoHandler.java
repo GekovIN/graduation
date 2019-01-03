@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -42,10 +41,18 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
-        if (rootCause.getMessage().contains("USERS_UNIQUE_EMAIL_IDX")) {
-            return logAndGetErrorInfo(req, e, true, ErrorType.DATA_ERROR, "User with this email already exists");
+        String rootCauseMessage = rootCause.getMessage();
+        String message = "";
+        if (rootCauseMessage.contains("USERS_UNIQUE_EMAIL_IDX")) {
+            message = "User with this email already exists";
+        } else if (rootCauseMessage.contains("foreign key no parent") ) {
+            if (rootCauseMessage.contains("MENU_DISHES")) {
+                message = "Not found foreign key (restaurant/dish) for new menu dish";
+            } else if (rootCauseMessage.contains("VOTES")) {
+                message = "Not found foreign key (restaurant) for new vote";
+            }
         }
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+        return logAndGetErrorInfo(req, e, true, ErrorType.DATA_ERROR, message);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
