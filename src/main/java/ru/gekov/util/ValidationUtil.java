@@ -1,5 +1,6 @@
 package ru.gekov.util;
 
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -7,7 +8,11 @@ import org.springframework.validation.BindingResult;
 import ru.gekov.model.AbstractBaseEntity;
 import ru.gekov.to.AbstractTo;
 import ru.gekov.to.MenuDishTo;
+import ru.gekov.util.exception.ErrorType;
+import ru.gekov.util.exception.IllegalRequestDataException;
+import ru.gekov.util.exception.NotFoundException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -47,13 +52,13 @@ public class ValidationUtil {
 
     public static void checkNew(AbstractBaseEntity entity) {
         if (!entity.isNew()) {
-            throw new IllegalArgumentException(entity + " must be new (id=null)");
+            throw new IllegalRequestDataException(entity + " must be new (id=null)");
         }
     }
 
     public static void checkNew(AbstractTo to) {
         if (!to.isNew()) {
-            throw new IllegalArgumentException(to + ", transfer object id must be null");
+            throw new IllegalRequestDataException(to + ", transfer object id must be null");
 
         }
     }
@@ -78,13 +83,13 @@ public class ValidationUtil {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
-            throw new IllegalArgumentException(entity + " must be with id=" + id);
+            throw new IllegalRequestDataException(entity + " must be with id=" + id);
         }
     }
 
     public static <T extends AbstractBaseEntity> T checkIdMatch(T entity, int id) {
         if (entity.getId() != id) {
-            throw new IllegalArgumentException(entity + " expected to be with id=" + id);
+            throw new IllegalRequestDataException(entity + " expected to be with id=" + id);
         }
         return entity;
     }
@@ -94,5 +99,30 @@ public class ValidationUtil {
         Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
         Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
         Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
+    }
+
+    //  http://stackoverflow.com/a/28565320/548473
+    public static Throwable getRootCause(Throwable t) {
+        Throwable result = t;
+        Throwable cause;
+
+        while (null != (cause = result.getCause()) && (result != cause)) {
+            result = cause;
+        }
+        return result;
+    }
+
+    public static String getMessage(Throwable e) {
+        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
+
+    public static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+        if (logException) {
+            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+        } else {
+            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+        }
+        return rootCause;
     }
 }

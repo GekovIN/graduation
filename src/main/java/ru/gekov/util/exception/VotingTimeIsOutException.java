@@ -1,4 +1,4 @@
-package ru.gekov.util;
+package ru.gekov.util.exception;
 
 public class VotingTimeIsOutException extends RuntimeException {
     public VotingTimeIsOutException(String message) {

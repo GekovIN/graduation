@@ -7,12 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.gekov.model.MenuDish;
 import ru.gekov.service.MenuDishService;
 import ru.gekov.to.MenuDishTo;
-import ru.gekov.util.ValidationUtil;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -63,11 +61,7 @@ public class MenuDishController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> createOrUpdate(@Valid MenuDishTo menuTo, BindingResult result) {
-        if (result.hasErrors()) {
-            return ValidationUtil.processBindingErrors(result);
-        }
-
+    public ResponseEntity<String> createOrUpdate(@Valid MenuDishTo menuTo) {
         if (menuTo.isNew()) {
             log.info("create new menuDish");
             menuService.create(menuTo);

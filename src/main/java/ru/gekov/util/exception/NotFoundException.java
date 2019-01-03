@@ -1,4 +1,4 @@
-package ru.gekov.util;
+package ru.gekov.util.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

@@ -3,7 +3,7 @@ package ru.gekov.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.gekov.model.Vote;
-import ru.gekov.util.VotingTimeIsOutException;
+import ru.gekov.util.exception.VotingTimeIsOutException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

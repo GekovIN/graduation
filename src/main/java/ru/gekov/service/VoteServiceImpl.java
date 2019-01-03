@@ -8,7 +8,7 @@ import ru.gekov.model.Vote;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.repository.VoteRepository;
-import ru.gekov.util.VotingTimeIsOutException;
+import ru.gekov.util.exception.VotingTimeIsOutException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

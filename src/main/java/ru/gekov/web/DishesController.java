@@ -51,10 +51,8 @@ public class DishesController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid Dish dish, BindingResult result) {
-        if (result.hasErrors()) {
-            return ValidationUtil.processBindingErrors(result);
-        }
+    public ResponseEntity<String> createOrUpdate(@Valid Dish dish) {
+
         if (dish.isNew()) {
             log.info("create new dish");
             service.create(dish);

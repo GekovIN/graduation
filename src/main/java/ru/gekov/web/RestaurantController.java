@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import ru.gekov.model.Restaurant;
 import ru.gekov.service.RestaurantService;
 import ru.gekov.to.RestaurantVoteCountTo;
-import ru.gekov.util.ValidationUtil;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
@@ -166,11 +164,8 @@ public class RestaurantController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> createOrUpdate(@Valid Restaurant restaurant, BindingResult result) {
+    public ResponseEntity<String> createOrUpdate(@Valid Restaurant restaurant) {
 
-        if (result.hasErrors()) {
-            return ValidationUtil.processBindingErrors(result);
-        }
         if (restaurant.isNew()) {
             log.info("create new restaurant");
             service.create(restaurant);
