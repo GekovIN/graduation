@@ -10,7 +10,9 @@ import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.to.MenuDishTo;
 import ru.gekov.util.ValidationUtil;
+import ru.gekov.util.exception.NotFoundException;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 

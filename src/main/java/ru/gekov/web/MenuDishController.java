@@ -8,15 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.MenuDish;
 import ru.gekov.service.MenuDishService;
 import ru.gekov.to.MenuDishTo;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.http.MediaType.*;
+import static ru.gekov.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(MenuDishController.REST_URL)
@@ -61,16 +64,25 @@ public class MenuDishController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> createOrUpdate(@Valid MenuDishTo menuTo) {
-        if (menuTo.isNew()) {
-            log.info("create new menuDish");
-            menuService.create(menuTo);
-        } else {
-            log.info("update menuDish with id=", menuTo.getId());
-            menuService.update(menuTo);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
+    public ResponseEntity<MenuDish> createWithNewUri(@Valid @RequestBody MenuDishTo menuTo) {
+        log.info("create {}", menuTo);
+        checkNew(menuTo);
+        MenuDish created = menuService.create(menuTo);
+        URI newResourceUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(newResourceUri).body(created);
     }
+
+    @PutMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
+    public void update(@Valid @RequestBody MenuDishTo menuTo, @PathVariable Integer id) {
+        log.info("update {} with id={}", menuTo, id);
+        assureToIdConsistent(menuTo, id);
+        menuService.update(menuTo);
+    }
+
 }

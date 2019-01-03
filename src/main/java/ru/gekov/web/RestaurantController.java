@@ -9,17 +9,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.Restaurant;
 import ru.gekov.service.RestaurantService;
 import ru.gekov.to.RestaurantVoteCountTo;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.format.annotation.DateTimeFormat.*;
 import static org.springframework.http.MediaType.*;
+import static ru.gekov.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(RestaurantController.REST_URL)
@@ -162,19 +165,27 @@ public class RestaurantController {
         service.delete(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> createOrUpdate(@Valid Restaurant restaurant) {
+    public ResponseEntity<Restaurant> createWithNewUri(@Valid @RequestBody Restaurant restaurant) {
+        log.info("create {}", restaurant);
+        checkNew(restaurant);
+        Restaurant created = service.create(restaurant);
+        URI newResourceUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(newResourceUri).body(created);
+    }
 
-        if (restaurant.isNew()) {
-            log.info("create new restaurant");
-            service.create(restaurant);
-        } else {
-            log.info("update restaurant {}", restaurant.getId());
-            service.update(restaurant);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable Integer id) {
+        log.info("update {} with id={}", restaurant, id);
+        assureEntityIdConsistent(restaurant, id);
+        service.update(restaurant);
     }
 
 }

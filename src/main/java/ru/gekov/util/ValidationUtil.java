@@ -63,27 +63,21 @@ public class ValidationUtil {
         }
     }
 
-    public static ResponseEntity<String> processBindingErrors(BindingResult result) {
-        StringJoiner joiner = new StringJoiner("<br>");
-        result.getFieldErrors().forEach(
-                fe -> {
-                    String msg = fe.getDefaultMessage();
-                    if (msg != null) {
-                        if (!msg.startsWith(fe.getField())) {
-                            msg = fe.getField() + ' ' + msg;
-                        }
-                        joiner.add(msg);
-                    }
-                });
-        return new ResponseEntity<>(joiner.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    public static void assureIdConsistent(AbstractBaseEntity entity, int id) {
+    public static void assureEntityIdConsistent(AbstractBaseEntity entity, int id) {
 //      http://stackoverflow.com/a/32728226/548473
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
             throw new IllegalRequestDataException(entity + " must be with id=" + id);
+        }
+    }
+
+    public static void assureToIdConsistent(AbstractTo to, int id) {
+//      http://stackoverflow.com/a/32728226/548473
+        if (to.isNew()) {
+            to.setId(id);
+        } else if (to.getId() != id) {
+            throw new IllegalRequestDataException(to + " must be with id=" + id);
         }
     }
 
@@ -96,7 +90,6 @@ public class ValidationUtil {
 
     public static void validateMenuDishTo(MenuDishTo menuDishTo) {
         Assert.notNull(menuDishTo, "menuDishTo must not be null");
-        Assert.notNull(menuDishTo.getId(), "menuDishTo.id must not be null");
         Assert.notNull(menuDishTo.getDishId(), "menuDishTo.dishId must not be null");
         Assert.notNull(menuDishTo.getRestaurantId(), "menuDishTo.restaurantId must not be null");
     }
