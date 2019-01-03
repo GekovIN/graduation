@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/votes", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithVote.class)
+    @Secured("ROLE_ADMIN")
     public List<Restaurant> getAllWithVotes() {
         log.info("get all restaurants with votes");
         return service.getAllWithVotes();
@@ -58,6 +60,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/menus-and-votes")
     @JsonView(View.JsonRestaurantsWithMenuAndVotes.class)
+    @Secured("ROLE_ADMIN")
     public List<Restaurant> getAllWithMenuDishesAndVotes() {
         log.info("get all restaurants with menuDishes and votes");
         return service.getAllWithMenuDishesAndVotes();
@@ -78,6 +81,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/{id}/votes", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithVote.class)
+    @Secured("ROLE_ADMIN")
     public Restaurant getByIdWithAllVotes(@PathVariable Integer id) {
         log.info("get restaurant {} with votes", id);
         return service.getWithVotesById(id);
@@ -85,6 +89,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/{id}/menus-and-votes", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenuAndVotes.class)
+    @Secured("ROLE_ADMIN")
     public Restaurant getByIdWithMenusAndVotes(@PathVariable Integer id) {
         log.info("get restaurant {} with menus and votes", id);
         return service.getWithMenuDishesAndVotesById(id);
@@ -106,6 +111,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/votes", params = "date", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithVote.class)
+    @Secured("ROLE_ADMIN")
     public List<Restaurant> getAllWithVotesByDate(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
         log.info("get restaurants with votes by date {}", date);
         return service.getWithVotesByDate(date);
@@ -121,6 +127,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/{id}/votes", params = "date", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithVote.class)
+    @Secured("ROLE_ADMIN")
     public Restaurant getWithVotesByIdAndDate(@PathVariable Integer id,
                                               @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
         log.info("get restaurant {} with votes by date {}", id, date);
@@ -129,6 +136,7 @@ public class RestaurantController {
 
     @GetMapping(value = "/{id}/menus-and-votes", params = "date", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenuAndVotes.class)
+    @Secured("ROLE_ADMIN")
     public Restaurant getWithMenuAndVotesByIdAndDate(@PathVariable Integer id,
                                                      @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
         log.info("get restaurant {} with menuDishes and votes by date {}", id, date);
@@ -150,12 +158,14 @@ public class RestaurantController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
     public void delete(@PathVariable int id) {
         log.info("delete restaurant {}", id);
         service.delete(id);
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> createOrUpdate(@Valid Restaurant restaurant, BindingResult result) {
 
         if (result.hasErrors()) {

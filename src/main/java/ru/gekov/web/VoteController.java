@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.gekov.AuthorizedUser;
@@ -29,14 +30,13 @@ public class VoteController {
         this.service = service;
     }
 
-    //TODO admin
     @GetMapping(value = "/votes", produces = APPLICATION_JSON_VALUE)
+    @Secured("ROLE_ADMIN")
     public List<Vote> getAll() {
         log.info("get all votes");
         return service.getAll();
     }
 
-    //TODO auth. user
     @GetMapping(value = "/profile/vote", params = "date", produces = APPLICATION_JSON_VALUE)
     public Vote getProfileVoteByDate(@RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date,
                                      @AuthenticationPrincipal AuthorizedUser authUser) {
@@ -44,8 +44,8 @@ public class VoteController {
         return service.getByUserAndDate(authUser.getId(), date);
     }
 
-    //TODO admin
     @GetMapping(value = "/users/{userId}/vote", params = "date", produces = APPLICATION_JSON_VALUE)
+    @Secured("ROLE_ADMIN")
     public Vote getVoteByUserIdAndDate(@PathVariable Integer userId, @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
         log.info("get vote by user {} and date {}", userId, date);
         return service.getByUserAndDate(userId, date);

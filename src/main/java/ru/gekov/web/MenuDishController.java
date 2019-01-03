@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.gekov.model.MenuDish;
@@ -35,6 +35,7 @@ public class MenuDishController {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @Secured("ROLE_ADMIN")
     public List<MenuDish> getAll() {
         log.info("get all menuDishes");
         return menuService.getAll();
@@ -54,12 +55,14 @@ public class MenuDishController {
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_ADMIN")
     public void delete(@PathVariable int id) {
         log.info("delete menuDish {}", id);
         menuService.delete(id);
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> createOrUpdate(@Valid MenuDishTo menuTo, BindingResult result) {
         if (result.hasErrors()) {
             return ValidationUtil.processBindingErrors(result);
