@@ -29,7 +29,7 @@ INSERT INTO RESTAURANTS (NAME, ADDRESS) VALUES
   ('Тайский ресторан', 'Тверская ул., д. 10'),
   ('Русский ресторан', 'Площадь им. Ленина, д. 18');
 
-INSERT INTO DISHES (NAME, COST) VALUES
+INSERT INTO DISHES (NAME, PRICE) VALUES
   ('Салат Цезарь', 500),
   ('Грибной суп', 1200),
   ('Стейк', 2100),

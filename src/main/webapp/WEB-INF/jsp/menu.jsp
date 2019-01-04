@@ -23,7 +23,7 @@
             <jsp:useBean id="menu" class="ru.gekov.model.MenuDish"/>
             <tr>
                 <td>${menu.dish.name}</td>
-                <td>${menu.dish.cost}</td>
+                <td>${menu.dish.price}</td>
                 <td>
                     <a href="${pageContext.request.contextPath}/restaurants/menu/${menu.id}/update">Update</a>
                     | <a href="${pageContext.request.contextPath}/restaurants/${menu.restaurant.id}/menu/${menu.id}/delete">Delete</a>

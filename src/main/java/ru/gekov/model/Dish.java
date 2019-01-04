@@ -14,30 +14,30 @@ public class Dish extends AbstractNamedEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DISHES_SEQ")
     private Integer id;
 
-    @Column(name = "COST")
+    @Column(name = "PRICE")
     @NotNull
-    private BigDecimal cost;
+    private BigDecimal price;
 
     public Dish() {
     }
 
-    public Dish(Integer id, String name, @NotNull BigDecimal cost) {
+    public Dish(Integer id, String name, @NotNull BigDecimal price) {
         super(name);
         this.id = id;
-        this.cost = cost;
+        this.price = price;
     }
 
-    public Dish(String name, @NotNull BigDecimal cost) {
+    public Dish(String name, @NotNull BigDecimal price) {
         super(name);
-        this.cost = cost;
+        this.price = price;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Dish extends AbstractNamedEntity {
     @Override
     public String toString() {
         return "Dish{" +
-                "cost=" + cost +
+                "price=" + price +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
