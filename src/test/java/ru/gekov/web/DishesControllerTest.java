@@ -7,6 +7,8 @@ import ru.gekov.model.Dish;
 import ru.gekov.service.DishService;
 import ru.gekov.web.json.JsonUtil;
 
+import java.math.BigDecimal;
+
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -16,8 +18,10 @@ import static ru.gekov.DishTestData.*;
 import static ru.gekov.TestUtil.readFromJsonResultActions;
 import static ru.gekov.TestUtil.userHttpBasic;
 import static ru.gekov.UserTestData.ADMIN;
+import static ru.gekov.UserTestData.USER_1;
+import static ru.gekov.util.exception.ErrorType.*;
 
-public class DishesControllerTest extends AbstractControllerTest {
+class DishesControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = DishesController.REST_URL + '/';
 
@@ -25,7 +29,7 @@ public class DishesControllerTest extends AbstractControllerTest {
     private DishService service;
 
     @Test
-    public void testGetAll() throws Exception {
+    void testGetAll() throws Exception {
         mockMvc.perform(get(REST_URL)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
@@ -35,7 +39,7 @@ public class DishesControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testGet() throws Exception {
+    void testGet() throws Exception {
         mockMvc.perform(get(REST_URL + EURO_DISH_1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
@@ -45,7 +49,7 @@ public class DishesControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    void testDelete() throws Exception {
         mockMvc.perform(delete(REST_URL + EURO_DISH_1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent())
@@ -55,7 +59,7 @@ public class DishesControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    void testCreate() throws Exception {
         Dish created = getCreated();
         ResultActions result = mockMvc.perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
@@ -70,7 +74,7 @@ public class DishesControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    void testUpdate() throws Exception {
         Dish updated = getUpdated();
         mockMvc.perform(put(REST_URL + EURO_DISH_1_ID)
                 .contentType(APPLICATION_JSON)
@@ -81,14 +85,69 @@ public class DishesControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void testGetNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL + 9999)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void testDeleteNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL + 9999)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void testUnauthorized() throws Exception {
         mockMvc.perform(get(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
 
-//    @Test
-//    void testWrongRole() throws Exception {
-//        mockMvc.perform(get(REST_URL).with(userHttpBasic(USER_1)))
-//                .andExpect(status().isForbidden());
-//    }
+    @Test
+    void testWrongRole() throws Exception {
+        mockMvc.perform(get(REST_URL).with(userHttpBasic(USER_1)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(APP_ERROR))
+                .andExpect(detailMessage("Access is denied"));
+    }
+
+    @Test
+    void testCreateInvalid() throws Exception {
+        Dish invalid = new Dish(null, null, new BigDecimal(1000));
+
+         mockMvc.perform(post(REST_URL)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
+    @Test
+    void testUpdateInvalid() throws Exception {
+        Dish invalid = new Dish(EURO_DISH_1_ID, null, new BigDecimal(1000));
+
+        mockMvc.perform(put(REST_URL + EURO_DISH_1_ID)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
+    @Test
+    void testUpdateHtmlUnsafe() throws Exception {
+        Dish invalid = new Dish(EURO_DISH_1_ID, "<script>alert(123)</script>", new BigDecimal(1000));
+
+        mockMvc.perform(put(REST_URL + EURO_DISH_1_ID)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
 }
