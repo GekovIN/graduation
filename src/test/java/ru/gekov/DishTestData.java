@@ -1,5 +1,6 @@
 package ru.gekov;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.gekov.model.Dish;
 
 import java.math.BigDecimal;
@@ -41,13 +42,31 @@ public class DishTestData {
     public static final Dish EURO_DISH_5 = new Dish(EURO_DISH_5_ID, "Томатный суп", new BigDecimal(270));
     public static final Dish EURO_DISH_6 = new Dish(EURO_DISH_6_ID, "Паста", new BigDecimal(290));
 
+    public static final Dish CREATED = new Dish(EURO_DISH_6_ID+1, "New dish", new BigDecimal(1111));
+
     public static final List<Dish> ALL_DISHES = List.of(EURO_DISH_1, EURO_DISH_2, EURO_DISH_3,
                                                         THAI_DISH_1, THAI_DISH_2,THAI_DISH_3,
-                                                        RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3);
+                                                        RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3,
+                                                        EURO_DISH_4, EURO_DISH_5, EURO_DISH_6);
 
-    public static final List<Dish> ALL_DISHES_EXCEPT_FIRST = List.of(EURO_DISH_2, EURO_DISH_3,
+    public static final List<Dish> ALL_DISHES_AFTER_DELETE = List.of(EURO_DISH_2, EURO_DISH_3,
                                                         THAI_DISH_1, THAI_DISH_2,THAI_DISH_3,
-                                                        RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3);
+                                                        RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3,
+                                                        EURO_DISH_4, EURO_DISH_5, EURO_DISH_6);
+
+    public static final List<Dish> ALL_DISHES_AFTER_CREATE = List.of(EURO_DISH_1, EURO_DISH_2, EURO_DISH_3,
+            THAI_DISH_1, THAI_DISH_2,THAI_DISH_3,
+            RUSS_DISH_1, RUSS_DISH_2, RUSS_DISH_3,
+            EURO_DISH_4, EURO_DISH_5, EURO_DISH_6,
+            CREATED);
+
+    public static Dish getCreated() {
+        return new Dish(null, "New dish", new BigDecimal(1111));
+    }
+
+    public static Dish getUpdated() {
+        return new Dish(EURO_DISH_1_ID, "Updated dish", new BigDecimal(2222));
+    }
 
     public static void assertMatch(Dish actual, Dish expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
@@ -55,6 +74,14 @@ public class DishTestData {
 
     public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected) {
         assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
+    }
+
+    public static ResultMatcher getDishesMatcher(Iterable<Dish> expected) {
+        return result -> assertMatch(TestUtil.readListFromJsonMvcResult(result, Dish.class), expected);
+    }
+
+    public static ResultMatcher getDishMatcher(Dish expected) {
+        return result -> assertMatch(TestUtil.readFromJsonMvcResult(result, Dish.class), expected);
     }
 
 }

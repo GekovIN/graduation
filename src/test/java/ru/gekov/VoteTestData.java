@@ -15,11 +15,16 @@ public class VoteTestData {
     public static final int VOTE_2_ID = VOTE_1_ID+1;
     public static final int VOTE_3_ID = VOTE_1_ID+2;
     public static final int CREATED_VOTE_ID = VOTE_1_ID+3;
-    public static final LocalDate VOTE_DATE = LocalDate.of(2018, 10, 29);
+    public static final LocalDate VOTE_DATE_2018_10_29 = LocalDate.of(2018, 10, 29);
+    public static final LocalDate VOTE_DATE_2018_10_31 = LocalDate.of(2018, 10, 31);
 
-    public static final Vote VOTE_1 = new Vote(VOTE_1_ID, VOTE_DATE, USER_1, EURO_REST);
-    public static final Vote VOTE_2 = new Vote(VOTE_2_ID, VOTE_DATE, USER_2, EURO_REST);
-    public static final Vote VOTE_3 = new Vote(VOTE_3_ID, VOTE_DATE, USER_3, THAI_REST);
+    public static final Vote VOTE_1 = new Vote(VOTE_1_ID, VOTE_DATE_2018_10_29, USER_1, EURO_REST);
+    public static final Vote VOTE_2 = new Vote(VOTE_2_ID, VOTE_DATE_2018_10_29, USER_2, EURO_REST);
+    public static final Vote VOTE_3 = new Vote(VOTE_3_ID, VOTE_DATE_2018_10_29, USER_3, THAI_REST);
+
+    public static final Vote VOTE_4 = new Vote(VOTE_3_ID, VOTE_DATE_2018_10_31, USER_1, EURO_REST);
+    public static final Vote VOTE_5 = new Vote(VOTE_3_ID, VOTE_DATE_2018_10_31, USER_2, EURO_REST);
+    public static final Vote VOTE_6 = new Vote(VOTE_3_ID, VOTE_DATE_2018_10_31, ADMIN, EURO_REST);
 
     public static final Vote CREATED_VOTE = new Vote(CREATED_VOTE_ID, LocalDate.of(2018, 1, 1), USER_3, RUSS_REST);
     public static final Vote UPDATED_VOTE = new Vote(VOTE_1_ID, VOTE_1.getDate(), VOTE_1.getUser(), RUSS_REST);
