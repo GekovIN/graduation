@@ -1,6 +1,8 @@
 package ru.gekov;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.gekov.model.MenuDish;
+import ru.gekov.to.MenuDishTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,23 +48,50 @@ public class MenuDishTestData {
     public static final MenuDish EURO_MENU_DISH_4 = new MenuDish(EURO_MENU_DISH_4_ID, LocalDate.of(2018, 10, 31), EURO_DISH_4, EURO_REST);
     public static final MenuDish EURO_MENU_DISH_5 = new MenuDish(EURO_MENU_DISH_5_ID, LocalDate.of(2018, 10, 31), EURO_DISH_5, EURO_REST);
     public static final MenuDish EURO_MENU_DISH_6 = new MenuDish(EURO_MENU_DISH_6_ID, LocalDate.of(2018, 10, 31), EURO_DISH_6, EURO_REST);
-    public static final List<MenuDish> EURO_MENU_2018_10_29 = List.of(EURO_MENU_DISH_1, EURO_MENU_DISH_2, EURO_MENU_DISH_3,
-                                                                      EURO_MENU_DISH_4, EURO_MENU_DISH_5, EURO_MENU_DISH_6);
+    public static final List<MenuDish> EURO_MENU_2018_10_29 = List.of(EURO_MENU_DISH_1, EURO_MENU_DISH_2, EURO_MENU_DISH_3);
 
+
+    public static final MenuDish CREATED = new MenuDish(EURO_MENU_DISH_6_ID+1, LocalDate.of(2019, 1, 1), EURO_DISH_1, EURO_REST);
+    public static final MenuDish UPDATED = new MenuDish(EURO_MENU_DISH_1_ID, LocalDate.of(2019, 1, 1), EURO_DISH_1, EURO_REST);
 
     public static final List<MenuDish> ALL_MENU = List.of(EURO_MENU_DISH_1, EURO_MENU_DISH_2, EURO_MENU_DISH_3,
                                                           THAI_MENU_DISH_1, THAI_MENU_DISH_2, THAI_MENU_DISH_3,
-                                                          RUSS_MENU_DISH_1, RUSS_MENU_DISH_2, RUSS_MENU_DISH_3);
+                                                          RUSS_MENU_DISH_1, RUSS_MENU_DISH_2, RUSS_MENU_DISH_3,
+                                                          EURO_MENU_DISH_4, EURO_MENU_DISH_5, EURO_MENU_DISH_6);
 
-    public static final List<MenuDish> ALL_MENU_EXCEPT_FIRST = List.of(EURO_MENU_DISH_2, EURO_MENU_DISH_3,
+    public static final List<MenuDish> ALL_MENU_AFTER_DELETE = List.of(EURO_MENU_DISH_2, EURO_MENU_DISH_3,
                                                           THAI_MENU_DISH_1, THAI_MENU_DISH_2, THAI_MENU_DISH_3,
-                                                          RUSS_MENU_DISH_1, RUSS_MENU_DISH_2, RUSS_MENU_DISH_3);
+                                                          RUSS_MENU_DISH_1, RUSS_MENU_DISH_2, RUSS_MENU_DISH_3,
+                                                          EURO_MENU_DISH_4, EURO_MENU_DISH_5, EURO_MENU_DISH_6);
+
+    public static final List<MenuDish> ALL_MENU_AFTER_CREATE = List.of(EURO_MENU_DISH_1, EURO_MENU_DISH_2, EURO_MENU_DISH_3,
+                                                                        THAI_MENU_DISH_1, THAI_MENU_DISH_2, THAI_MENU_DISH_3,
+                                                                        RUSS_MENU_DISH_1, RUSS_MENU_DISH_2, RUSS_MENU_DISH_3,
+                                                                        EURO_MENU_DISH_4, EURO_MENU_DISH_5, EURO_MENU_DISH_6,
+                                                                        CREATED);
+
+    public static MenuDishTo getUpdatedTo() {
+        return new MenuDishTo(EURO_MENU_DISH_1_ID, LocalDate.of(2019, 1, 1), 100000, 100000);
+    }
+
+    public static MenuDishTo getCreatedTo() {
+        return new MenuDishTo(null, LocalDate.of(2019, 1, 1), 100000, 100000);
+    }
+
     public static void assertMatch(MenuDish actual, MenuDish expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
     public static void assertMatch(Iterable<MenuDish> actual, Iterable<MenuDish> expected) {
         assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
+    }
+
+    public static ResultMatcher getMenuDishesMatcher(Iterable<MenuDish> expected) {
+        return result -> assertMatch(TestUtil.readListFromJsonMvcResult(result, MenuDish.class), expected);
+    }
+
+    public static ResultMatcher getMenuDishMatcher(MenuDish expected) {
+        return result -> assertMatch(TestUtil.readFromJsonMvcResult(result, MenuDish.class), expected);
     }
 
 }
