@@ -2,18 +2,28 @@ package ru.gekov.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.service.MenuDishService;
 import ru.gekov.to.MenuDishTo;
 import ru.gekov.web.json.JsonUtil;
+
+import java.time.LocalDate;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.gekov.DishTestData.*;
 import static ru.gekov.MenuDishTestData.*;
+import static ru.gekov.RestaurantTestData.*;
 import static ru.gekov.TestUtil.userHttpBasic;
 import static ru.gekov.UserTestData.ADMIN;
+import static ru.gekov.UserTestData.USER_1;
+import static ru.gekov.util.exception.ErrorType.APP_ERROR;
+import static ru.gekov.util.exception.ErrorType.DATA_ERROR;
+import static ru.gekov.util.exception.ErrorType.VALIDATION_ERROR;
 
 class MenuDishControllerTest extends AbstractControllerTest {
 
@@ -85,4 +95,74 @@ class MenuDishControllerTest extends AbstractControllerTest {
 
         assertMatch(service.getById(EURO_MENU_DISH_1_ID), UPDATED);
     }
+
+    @Test
+    void testGetNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL_SLASH + 9999)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void testDeleteNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL_SLASH + 9999)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void testUnauthorized() throws Exception {
+        mockMvc.perform(get(REST_URL))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testWrongRole() throws Exception {
+        mockMvc.perform(get(REST_URL).with(userHttpBasic(USER_1)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(APP_ERROR))
+                .andExpect(detailMessage("Access is denied"));
+    }
+
+    @Test
+    void testCreateInvalid() throws Exception {
+        MenuDishTo invalid = new MenuDishTo(null, null, EURO_REST_ID, EURO_DISH_1_ID);
+
+        mockMvc.perform(post(REST_URL)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void testCreateNotFoundForeignKey() throws Exception {
+        MenuDishTo invalid = new MenuDishTo(null, LocalDate.of(2019, 1, 1), 999999, EURO_DISH_1_ID);
+
+        mockMvc.perform(post(REST_URL)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isConflict())
+                .andExpect(errorType(DATA_ERROR))
+                .andExpect(detailMessage("Not found foreign key (restaurant/dish) for new menu dish"))
+                .andDo(print());
+    }
+
+    @Test
+    void testUpdateInvalid() throws Exception {
+        MenuDishTo invalid = new MenuDishTo(EURO_MENU_DISH_1_ID, null, EURO_REST_ID, EURO_DISH_1_ID);
+
+        mockMvc.perform(put(REST_URL_SLASH + EURO_MENU_DISH_1_ID)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
 }
