@@ -23,6 +23,7 @@ import static ru.gekov.TestUtil.userHttpBasic;
 import static ru.gekov.UserTestData.*;
 import static ru.gekov.UserTestData.USER_1;
 import static ru.gekov.util.exception.ErrorType.*;
+import static ru.gekov.web.ExceptionInfoHandler.*;
 
 class ProfileControllerTest extends AbstractControllerTest {
 
@@ -116,7 +117,7 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isConflict())
                 .andExpect(errorType(DATA_ERROR))
-                .andExpect(detailMessage("User with this email already exists"))
+                .andExpect(detailMessage(DUPLICATE_USER_MSG))
                 .andDo(print());
     }
 

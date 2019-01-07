@@ -24,6 +24,7 @@ import static ru.gekov.UserTestData.USER_1;
 import static ru.gekov.util.exception.ErrorType.APP_ERROR;
 import static ru.gekov.util.exception.ErrorType.DATA_ERROR;
 import static ru.gekov.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.gekov.web.ExceptionInfoHandler.*;
 
 class MenuDishControllerTest extends AbstractControllerTest {
 
@@ -148,7 +149,7 @@ class MenuDishControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isConflict())
                 .andExpect(errorType(DATA_ERROR))
-                .andExpect(detailMessage("Not found foreign key (restaurant/dish) for new menu dish"))
+                .andExpect(detailMessage(MENU_DISH_FOREIGN_KEY_NOT_FOUND_MSG))
                 .andDo(print());
     }
 

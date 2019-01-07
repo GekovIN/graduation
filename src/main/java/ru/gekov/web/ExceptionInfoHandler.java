@@ -30,6 +30,10 @@ import static ru.gekov.util.exception.ErrorType.*;
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
+    public static final String DUPLICATE_USER_MSG = "User with this email already exists";
+    public static final String MENU_DISH_FOREIGN_KEY_NOT_FOUND_MSG =  "Not found foreign key (restaurant/dish) for new menu dish";
+    public static final String VOTE_FOREIGN_KEY_NOT_FOUND_MSG =  "Not found foreign key (restaurant) for new vote";
+
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(NotFoundException.class)
@@ -44,12 +48,12 @@ public class ExceptionInfoHandler {
         String rootCauseMessage = rootCause.getMessage();
         String message = "";
         if (rootCauseMessage.contains("USERS_UNIQUE_EMAIL_IDX")) {
-            message = "User with this email already exists";
+            message = DUPLICATE_USER_MSG;
         } else if (rootCauseMessage.contains("foreign key no parent") ) {
             if (rootCauseMessage.contains("MENU_DISHES")) {
-                message = "Not found foreign key (restaurant/dish) for new menu dish";
+                message = MENU_DISH_FOREIGN_KEY_NOT_FOUND_MSG;
             } else if (rootCauseMessage.contains("VOTES")) {
-                message = "Not found foreign key (restaurant) for new vote";
+                message = VOTE_FOREIGN_KEY_NOT_FOUND_MSG;
             }
         }
         return logAndGetErrorInfo(req, e, true, ErrorType.DATA_ERROR, message);
