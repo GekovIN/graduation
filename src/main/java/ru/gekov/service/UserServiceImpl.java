@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void update(UserTo userTo, int id) {
+        assureToIdConsistent(userTo, id);
         User user = ToUtil.updateFromTo(get(userTo.getId()), userTo);
         repository.save(prepareUserToSave(user, passwordEncoder));
     }

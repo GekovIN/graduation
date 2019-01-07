@@ -12,5 +12,5 @@ public class View {
     // For User fields (register date, roles, etc.) showing only in profiles options
     public interface JsonProfile {}
 
-    public interface JsonUserWithVotes {}
+    public interface JsonUserWithVotes extends JsonProfile {}
 }

@@ -13,6 +13,7 @@ public class UserTo extends AbstractTo implements Serializable {
 
     @NotBlank
     @Size(min = 2, max = 100)
+    @SafeHtml
     private String name;
 
     @Email
@@ -21,7 +22,7 @@ public class UserTo extends AbstractTo implements Serializable {
     @SafeHtml
     private String email;
 
-    @Size(min = 5, max = 32, message = "length must between 5 and 32 characters")
+    @Size(min = 5, max = 32)
     private String password;
 
     public UserTo() {

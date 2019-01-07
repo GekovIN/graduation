@@ -62,6 +62,7 @@ public class ProfileController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @JsonView(View.JsonProfile.class)
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("create {}", userTo);
         checkNew(userTo);
@@ -75,7 +76,7 @@ public class ProfileController {
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo,
+    public void update(@RequestBody @Valid UserTo userTo,
                        @AuthenticationPrincipal AuthorizedUser authUser) {
         int id = authUser.getId();
         log.info("update user with id=", id);

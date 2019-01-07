@@ -61,6 +61,10 @@ public class User extends AbstractNamedEntity {
     public User() {
     }
 
+    public User(User u) {
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles());
+    }
+
     public User(String name, String email, String password, Role role, Role... roles) {
         super(name);
         this.email = email;
@@ -132,5 +136,25 @@ public class User extends AbstractNamedEntity {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        if (votes.isEmpty())
+            this.votes = Collections.emptySet();
+        this.votes = votes;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
