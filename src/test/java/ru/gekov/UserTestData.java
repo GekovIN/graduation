@@ -4,12 +4,14 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import ru.gekov.model.Role;
 import ru.gekov.model.User;
 import ru.gekov.web.json.JsonUtil;
+import ru.gekov.web.json.View;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.gekov.TestUtil.readFromJsonMvcResult;
+import static ru.gekov.TestUtil.readListFromJsonMvcResult;
 import static ru.gekov.VoteTestData.*;
 
 public class UserTestData {
@@ -25,8 +27,10 @@ public class UserTestData {
     public static final User USER_3 = new User(USER_3_ID, "User3", "user3@yandex.ru", "password3", Role.ROLE_USER);
 
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
+    public static final User CREATED = new User(ADMIN_ID+1, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
     public static final List<User> ALL_USERS = List.of(USER_1, USER_2, USER_3, ADMIN);
     public static final List<User> ALL_USERS_AFTER_DELETE = List.of(USER_2, USER_3, ADMIN);
+    public static final List<User> ALL_USERS_AFTER_CREATE = List.of(USER_1, USER_2, USER_3, ADMIN, CREATED);
 
     public static void assertMatch(User actual, User expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "password", "votes");
@@ -54,12 +58,17 @@ public class UserTestData {
         return result -> assertMatch(readFromJsonMvcResult(result, User.class), expected);
     }
 
+
+    public static ResultMatcher getUserMatcher(Iterable<User> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, User.class), expected);
+    }
+
     public static ResultMatcher getUserWithVotesMatcher(User expected) {
         return result -> assertMatchWithVotes(readFromJsonMvcResult(result, User.class), expected);
     }
 
     public static String jsonWithPassword(User user, String password) {
-        return JsonUtil.writeAdditionProps(user, "password", password);
+        return JsonUtil.writeAdditionPropsWithCustomView(user, "password", password, View.JsonProfile.class);
     }
 
 }
