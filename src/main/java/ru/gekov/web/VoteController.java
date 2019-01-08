@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,13 @@ public class VoteController {
         return service.getAll();
     }
 
+    @GetMapping(value = "/votes/{id}", produces = APPLICATION_JSON_VALUE)
+    @Secured("ROLE_ADMIN")
+    public Vote get(@PathVariable Integer id) {
+        log.info("get vote with id={}", id);
+        return service.get(id);
+    }
+
     @GetMapping(value = "/profile/vote", params = "date", produces = APPLICATION_JSON_VALUE)
     public Vote getProfileVoteByDate(@RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate date,
                                      @AuthenticationPrincipal AuthorizedUser authUser) {
@@ -58,6 +66,13 @@ public class VoteController {
         int userId = authUser.getId();
         log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
         service.save(LocalDateTime.now(), userId, restaurantId);
+    }
+
+    @DeleteMapping(value = "/votes/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        log.info("delete vote with id={}", id);
+        service.delete(id);
     }
 
 //  Test
