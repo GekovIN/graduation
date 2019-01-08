@@ -31,8 +31,6 @@ public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     public static final String DUPLICATE_USER_MSG = "User with this email already exists";
-    public static final String MENU_DISH_FOREIGN_KEY_NOT_FOUND_MSG =  "Not found foreign key (restaurant/dish) for new menu dish";
-    public static final String VOTE_FOREIGN_KEY_NOT_FOUND_MSG =  "Not found foreign key (restaurant) for new vote";
 
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
@@ -46,15 +44,11 @@ public class ExceptionInfoHandler {
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         String rootCauseMessage = rootCause.getMessage();
-        String message = "";
+        String message;
         if (rootCauseMessage.contains("USERS_UNIQUE_EMAIL_IDX")) {
             message = DUPLICATE_USER_MSG;
-        } else if (rootCauseMessage.contains("foreign key no parent") ) {
-            if (rootCauseMessage.contains("MENU_DISHES")) {
-                message = MENU_DISH_FOREIGN_KEY_NOT_FOUND_MSG;
-            } else if (rootCauseMessage.contains("VOTES")) {
-                message = VOTE_FOREIGN_KEY_NOT_FOUND_MSG;
-            }
+        } else {
+            message = rootCauseMessage;
         }
         return logAndGetErrorInfo(req, e, true, ErrorType.DATA_ERROR, message);
     }
