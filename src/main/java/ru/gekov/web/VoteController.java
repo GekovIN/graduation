@@ -3,15 +3,19 @@ package ru.gekov.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.AuthorizedUser;
 import ru.gekov.model.Vote;
 import ru.gekov.service.VoteService;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,12 +64,19 @@ public class VoteController {
     }
 
     //  Vote for restaurant by authorized user
-    @PutMapping(value = "/profile/{id}/vote")
-    public void vote(@PathVariable("id") Integer restaurantId,
-                     @AuthenticationPrincipal AuthorizedUser authUser) {
+    @PutMapping(value = "/profile/vote", params = "restaurantId", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Vote> vote(@Param("restaurantId") Integer restaurantId,
+                               @AuthenticationPrincipal AuthorizedUser authUser) {
         int userId = authUser.getId();
         log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
-        service.save(LocalDateTime.now(), userId, restaurantId);
+
+        Vote created = service.save(LocalDateTime.now(), userId, restaurantId);
+        URI newResourceUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/votes" + "/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+        return ResponseEntity.created(newResourceUri).body(created);
     }
 
     @DeleteMapping(value = "/votes/{id}")

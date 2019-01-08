@@ -2,6 +2,7 @@ package ru.gekov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.model.Restaurant;
 import ru.gekov.model.User;
 import ru.gekov.model.Vote;
@@ -50,16 +51,24 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
+    @Transactional
     public Vote save(LocalDateTime dateTime, int userId, int restaurantId) {
         Optional<Vote> voteOptional = voteRepository.findByUserIdAndDate(userId, dateTime.toLocalDate());
         if (voteOptional.isPresent()
                 && dateTime.toLocalTime().isBefore(VOTE_END_TIME)) {
-            return update(voteOptional.get(), restaurantId);
+            return initLazyObj(update(voteOptional.get(), restaurantId));
         } else if (!voteOptional.isPresent()) {
-            return create(dateTime.toLocalDate(), userId, restaurantId);
+            return initLazyObj(create(dateTime.toLocalDate(), userId, restaurantId));
         } else {
             throw new VotingTimeIsOutException("Vote time: " + VOTE_END_TIME + " is over.");
         }
+    }
+
+    //init lazy restaurant and user after saving
+    private Vote initLazyObj(Vote vote) {
+        vote.getRestaurant().toString();
+        vote.getUser().toString();
+        return vote;
     }
 
     private Vote update(Vote vote, int restaurantId) {

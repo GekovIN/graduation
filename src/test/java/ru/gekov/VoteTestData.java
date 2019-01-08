@@ -33,10 +33,14 @@ public class VoteTestData {
     public static final Vote UPDATED_VOTE = new Vote(VOTE_1_ID, VOTE_1.getDate(), VOTE_1.getUser(), RUSS_REST);
 
     public static final List<Vote> ALL_VOTES = List.of(VOTE_1, VOTE_2, VOTE_3, VOTE_4, VOTE_5, VOTE_6);
-    public static final List<Vote> ALL_VOTES_EXCEPT_FIRST = List.of(VOTE_2, VOTE_3);
+    public static final List<Vote> ALL_VOTES_AFTER_DELETE = List.of(VOTE_2, VOTE_3, VOTE_4, VOTE_5, VOTE_6);
 
     public static void assertMatch(Vote actual, Vote expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
+    }
+
+    public static void assertMatch(Iterable<Vote> actual, Vote... expected) {
+        assertMatch(actual, List.of(expected));
     }
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
@@ -51,7 +55,4 @@ public class VoteTestData {
         return result -> assertMatch(TestUtil.readFromJsonMvcResult(result, Vote.class), expected);
     }
 
-    public static Vote getNewVote() {
-        return new Vote(CREATED_VOTE_ID, LocalDate.now(), USER_1, EURO_REST);
-    }
 }
