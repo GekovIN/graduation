@@ -80,13 +80,12 @@ public class VoteServiceImpl implements VoteService {
     private Vote create(LocalDate date, int userId, int restaurantId) {
         User user = userRepository.getOne(userId);
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
-        Vote vote = new Vote(date, user, restaurant);
-        return voteRepository.save(vote);
+        return voteRepository.save(new Vote(date, user, restaurant));
     }
 
     @Override
-    public boolean delete(int id) {
-        return voteRepository.delete(id) != 0;
+    public void delete(int id) {
+        checkNotFoundWithId(voteRepository.delete(id) != 0, id);
     }
 
 }

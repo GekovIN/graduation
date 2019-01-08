@@ -12,5 +12,5 @@ public interface VoteService {
     List<Vote> getAll();
     Vote getByUserAndDate(int userId, LocalDate date);
     Vote save(LocalDateTime dateTime, int userId, int restaurantId);
-    boolean delete(int id);
+    void delete(int id);
 }

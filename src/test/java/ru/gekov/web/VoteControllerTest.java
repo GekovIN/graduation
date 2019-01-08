@@ -3,15 +3,15 @@ package ru.gekov.web;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.model.Vote;
 import ru.gekov.service.VoteService;
 
 import java.time.LocalDate;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +21,7 @@ import static ru.gekov.TestUtil.userHttpBasic;
 import static ru.gekov.UserTestData.ADMIN;
 import static ru.gekov.UserTestData.USER_1;
 import static ru.gekov.VoteTestData.*;
+import static ru.gekov.util.exception.ErrorType.APP_ERROR;
 
 class VoteControllerTest extends AbstractControllerTest {
 
@@ -89,5 +90,39 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print());
 
         assertMatch(service.getAll(), ALL_VOTES_AFTER_DELETE);
+    }
+
+    @Test
+    void testGetNotFound() throws Exception {
+        mockMvc.perform(get("/votes/1")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void deleteNotFound() throws Exception {
+        mockMvc.perform(delete("/votes/1")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void testCreateNotFoundForeignKey() throws Exception {
+        mockMvc.perform(put("/profile/vote?restaurantId=1")
+                .with(userHttpBasic(USER_1)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(APP_ERROR))
+                .andExpect(detailMessage("Unable to find ru.gekov.model.Restaurant with id 1"))
+                .andDo(print());
+    }
+
+    @Test
+    void testWrongRole() throws Exception {
+        mockMvc.perform(get("/votes")
+                .with(userHttpBasic(USER_1)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(APP_ERROR))
+                .andExpect(detailMessage("Access is denied"));
     }
 }
