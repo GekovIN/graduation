@@ -12,7 +12,7 @@ public interface MenuDishService {
     List<MenuDish> getAllByDate(LocalDate date);
     List<MenuDish> getAllByRestaurantId(int restaurant_id);
     MenuDish getById(int id);
-    MenuDish update(MenuDishTo menuDishTo);
+    void update(MenuDishTo menuDishTo);
     MenuDish create(MenuDishTo menuDishTo);
     void delete(int id);
 

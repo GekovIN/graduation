@@ -141,15 +141,15 @@ class MenuDishControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void testCreateNotFoundForeignKey() throws Exception {
-        MenuDishTo invalid = new MenuDishTo(null, LocalDate.of(2019, 1, 1), 999999, EURO_DISH_1_ID);
+        MenuDishTo invalid = new MenuDishTo(null, LocalDate.of(2019, 1, 1), EURO_REST_ID, 1);
 
         mockMvc.perform(post(REST_URL)
                 .contentType(APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
                 .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isConflict())
-                .andExpect(errorType(DATA_ERROR))
-                .andExpect(detailMessage(MENU_DISH_FOREIGN_KEY_NOT_FOUND_MSG))
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(APP_ERROR))
+                .andExpect(detailMessage("Unable to find ru.gekov.model.Dish with id 1"))
                 .andDo(print());
     }
 

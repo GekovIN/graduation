@@ -2,6 +2,7 @@ package ru.gekov.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.model.Dish;
 import ru.gekov.model.MenuDish;
 import ru.gekov.model.Restaurant;
@@ -10,9 +11,7 @@ import ru.gekov.repository.MenuDishRepository;
 import ru.gekov.repository.RestaurantRepository;
 import ru.gekov.to.MenuDishTo;
 import ru.gekov.util.ValidationUtil;
-import ru.gekov.util.exception.NotFoundException;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public MenuDish update(MenuDishTo menuDishTo) {
+    public void update(MenuDishTo menuDishTo) {
         ValidationUtil.validateMenuDishTo(menuDishTo);
 
         MenuDish menuDish = getById(menuDishTo.getId());
@@ -63,17 +62,25 @@ public class MenuDishServiceImpl implements MenuDishService {
         menuDish.setDish(dish);
         menuDish.setRestaurant(restaurant);
         menuDish.setDate(menuDishTo.getDate());
-        return menuDishRepository.save(menuDish);
+        menuDishRepository.save(menuDish);
     }
 
     @Override
+    @Transactional
     public MenuDish create(MenuDishTo menuDishTo) {
         ValidationUtil.validateMenuDishTo(menuDishTo);
 
         checkNew(menuDishTo);
         Dish dish = dishRepository.getOne(menuDishTo.getDishId());
         Restaurant restaurant = restaurantRepository.getOne(menuDishTo.getRestaurantId());
-        return menuDishRepository.save(new MenuDish(menuDishTo.getDate(), dish, restaurant));
+        return initLazyObj(menuDishRepository.save(new MenuDish(menuDishTo.getDate(), dish, restaurant)));
+    }
+
+    //init lazy restaurant and dish after saving
+    private MenuDish initLazyObj(MenuDish menuDish) {
+        menuDish.getDish().toString();
+        menuDish.getRestaurant().toString();
+        return menuDish;
     }
 
     @Override
