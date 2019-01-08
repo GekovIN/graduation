@@ -69,14 +69,14 @@ public class RestaurantController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public Restaurant getById(@PathVariable Integer id) {
-        log.info("get restaurant {}", id);
+        log.info("get restaurant with id={}", id);
         return service.get(id);
     }
 
     @GetMapping(value = "/{id}/menus", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonRestaurantsWithMenu.class)
     public Restaurant getByIdWithAllMenus(@PathVariable Integer id) {
-        log.info("get restaurant {} with menuDishes", id);
+        log.info("get restaurant with id={} with menuDishes", id);
         return service.getWithMenuDishesById(id);
     }
 
@@ -84,7 +84,7 @@ public class RestaurantController {
     @JsonView(View.JsonRestaurantsWithVote.class)
     @Secured("ROLE_ADMIN")
     public Restaurant getByIdWithAllVotes(@PathVariable Integer id) {
-        log.info("get restaurant {} with votes", id);
+        log.info("get restaurant with id={} with votes", id);
         return service.getWithVotesById(id);
     }
 
@@ -92,7 +92,7 @@ public class RestaurantController {
     @JsonView(View.JsonRestaurantsWithMenuAndVotes.class)
     @Secured("ROLE_ADMIN")
     public Restaurant getByIdWithMenusAndVotes(@PathVariable Integer id) {
-        log.info("get restaurant {} with menus and votes", id);
+        log.info("get restaurant with id={} with menus and votes", id);
         return service.getWithMenuDishesAndVotesById(id);
     }
 
@@ -122,7 +122,7 @@ public class RestaurantController {
     @JsonView(View.JsonRestaurantsWithMenu.class)
     public Restaurant getWithMenuByIdAndDate(@PathVariable("id") Integer id,
                                              @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
-        log.info("get restaurant {} with menuDishes by date {}", id, date);
+        log.info("get restaurant with id={} with menuDishes by date {}", id, date);
         return service.getWithMenuDishesByIdAndDate(id, date);
     }
 
@@ -131,7 +131,7 @@ public class RestaurantController {
     @Secured("ROLE_ADMIN")
     public Restaurant getWithVotesByIdAndDate(@PathVariable Integer id,
                                               @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
-        log.info("get restaurant {} with votes by date {}", id, date);
+        log.info("get restaurant with id={} with votes by date {}", id, date);
         return service.getWithVotesByIdAndDate(id, date);
     }
 
@@ -140,14 +140,14 @@ public class RestaurantController {
     @Secured("ROLE_ADMIN")
     public Restaurant getWithMenuAndVotesByIdAndDate(@PathVariable Integer id,
                                                      @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
-        log.info("get restaurant {} with menuDishes and votes by date {}", id, date);
+        log.info("get restaurant with id={} with menuDishes and votes by date {}", id, date);
         return service.getWithMenuDishesAndVotesByIdAndDate(id, date);
     }
 
     @GetMapping(value = "/{id}/votes-count", params = "date", produces = APPLICATION_JSON_VALUE)
     public RestaurantVoteCountTo getWithVotesCountByIdAndDate(@PathVariable Integer id,
                                                               @DateTimeFormat(iso = ISO.DATE) @RequestParam("date") LocalDate date) {
-        log.info("get restaurant {} with votes count by date {}", id, date);
+        log.info("get restaurant with id={} with votes count by date {}", id, date);
         return service.getWithVotesCountByIdAndDate(id, date);
     }
 
@@ -161,7 +161,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
     public void delete(@PathVariable int id) {
-        log.info("delete restaurant {}", id);
+        log.info("delete restaurant with id={}", id);
         service.delete(id);
     }
 

@@ -44,13 +44,13 @@ public class MenuDishController {
 
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public MenuDish get(@PathVariable int id) {
-        log.info("get menuDish {}", id);
+        log.info("get menuDish with id={}", id);
         return menuService.getById(id);
     }
 
     @GetMapping(params = "date", produces = APPLICATION_JSON_VALUE)
     public List<MenuDish> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        log.info("get menuDishes by {}", date);
+        log.info("get menuDishes by date {}", date);
         return menuService.getAllByDate(date);
     }
 

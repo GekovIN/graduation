@@ -39,7 +39,7 @@ public class AdminController {
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
     public User get(@PathVariable Integer id) {
-        log.info("get user with id=", id);
+        log.info("get user with id={}", id);
         return service.get(id);
     }
 
@@ -47,6 +47,7 @@ public class AdminController {
     @GetMapping(value = "/by", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
     public User getByMail(@RequestParam("email") String email) {
+        log.info("get user with email {}", email);
         return service.getByEmail(email);
     }
 
@@ -87,7 +88,7 @@ public class AdminController {
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
-        log.info("delete user with id=", id);
+        log.info("delete user with id={}", id);
         service.delete(id);
     }
 

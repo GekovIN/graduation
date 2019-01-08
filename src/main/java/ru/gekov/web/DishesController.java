@@ -43,14 +43,14 @@ public class DishesController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Dish get(@PathVariable Integer id) {
-        log.info("get dish with id=", id);
+        log.info("get dish with id={}", id);
         return service.get(id);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
-        log.info("delete dish with id=", id);
+        log.info("delete dish with id={}", id);
         service.delete(id);
     }
 

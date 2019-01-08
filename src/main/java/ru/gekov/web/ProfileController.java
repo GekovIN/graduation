@@ -40,7 +40,7 @@ public class ProfileController {
     @JsonView(View.JsonProfile.class)
     public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
         int id = authUser.getId();
-        log.info("get user with id=", id);
+        log.info("get user with id={}", id);
         return service.get(id);
     }
 
@@ -48,7 +48,7 @@ public class ProfileController {
     @JsonView(View.JsonUserWithVotes.class)
     public User getWithVotes(@AuthenticationPrincipal AuthorizedUser authUser) {
         int id = authUser.getId();
-        log.info("get user {} with all votes", id);
+        log.info("get user with id={} with all votes", id);
         return service.getWithVotes(id);
     }
 
@@ -56,7 +56,7 @@ public class ProfileController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
         int id = authUser.getId();
-        log.info("delete user with id=", id);
+        log.info("delete user with id={}", id);
         service.delete(id);
     }
 
@@ -79,7 +79,7 @@ public class ProfileController {
     public void update(@RequestBody @Valid UserTo userTo,
                        @AuthenticationPrincipal AuthorizedUser authUser) {
         int id = authUser.getId();
-        log.info("update user with id=", id);
+        log.info("update user with id={}", id);
         service.update(userTo, id);
     }
 
