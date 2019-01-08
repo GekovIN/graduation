@@ -10,10 +10,7 @@ public interface VoteService {
 
     Vote get(int id);
     List<Vote> getAll();
-    List<Vote> getByDate(LocalDate date);
-    List<Vote> getByRestaurantAndDate(int restaurantId, LocalDate date);
     Vote getByUserAndDate(int userId, LocalDate date);
     Vote save(LocalDateTime dateTime, int userId, int restaurantId);
     boolean delete(int id);
-    Long countVotes(LocalDate date, int restaurantId);
 }

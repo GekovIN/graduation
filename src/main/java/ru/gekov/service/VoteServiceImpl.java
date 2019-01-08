@@ -16,6 +16,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+import static ru.gekov.util.ValidationUtil.*;
+
 @Service
 public class VoteServiceImpl implements VoteService {
 
@@ -39,22 +41,12 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Vote get(int id) {
-        return voteRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public List<Vote> getByDate(LocalDate date) {
-        return voteRepository.findAllByDate(date);
-    }
-
-    @Override
-    public List<Vote> getByRestaurantAndDate(int restaurantId, LocalDate date) {
-        return voteRepository.findByRestaurantIdAndDate(restaurantId, date);
+        return checkNotFoundWithId(voteRepository.findById(id).orElse(null), id);
     }
 
     @Override
     public Vote getByUserAndDate(int userId, LocalDate date) {
-        return voteRepository.findByUserIdAndDate(userId, date).orElse(null);
+        return checkNotFoundWithIdAndDate(voteRepository.findByUserIdAndDate(userId, date).orElse(null), userId, date);
     }
 
     @Override
@@ -88,8 +80,4 @@ public class VoteServiceImpl implements VoteService {
         return voteRepository.delete(id) != 0;
     }
 
-    @Override
-    public Long countVotes(LocalDate date, int restaurantId) {
-        return voteRepository.countAllByRestaurantIdAndDate(restaurantId, date);
-    }
 }
