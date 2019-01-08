@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class EntitiesUtil {
 
     public static List<Restaurant> getRestaurantsWithMenu(List<MenuDish> menuDishes) {
-        Map<Restaurant, List<MenuDish>> dishMap = new HashMap<>();
+        Map<Restaurant, List<MenuDish>> dishMap = new LinkedHashMap<>();
         menuDishes.forEach(
                 m -> dishMap
                         .computeIfAbsent(m.getRestaurant(), d -> new ArrayList<>())
@@ -33,7 +33,7 @@ public class EntitiesUtil {
     }
 
     public static List<Restaurant> getRestaurantsWithVotes(List<Vote> votes) {
-        Map<Restaurant, List<Vote>> votesMap = new HashMap<>();
+        Map<Restaurant, List<Vote>> votesMap = new LinkedHashMap<>();
         votes.forEach(
                 m -> votesMap
                         .computeIfAbsent(m.getRestaurant(), d -> new ArrayList<>())

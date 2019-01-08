@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gekov.model.MenuDish;
 
+import javax.persistence.OrderBy;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public interface MenuDishRepository extends JpaRepository<MenuDish, Integer> {
     List<MenuDish> findAll();
 
     @EntityGraph(attributePaths = {"dish", "restaurant"})
+    @OrderBy(value = "id")
     List<MenuDish> findAllByDate(LocalDate date);
 
     @EntityGraph(attributePaths = {"dish"})

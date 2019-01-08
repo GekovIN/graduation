@@ -24,11 +24,11 @@ public class VoteTestData {
 
     public static final Vote VOTE_1 = new Vote(VOTE_1_ID, VOTE_DATE_2018_10_29, USER_1, EURO_REST);
     public static final Vote VOTE_2 = new Vote(VOTE_2_ID, VOTE_DATE_2018_10_29, USER_2, EURO_REST);
-    public static final Vote VOTE_3 = new Vote(VOTE_3_ID, VOTE_DATE_2018_10_29, USER_3, THAI_REST);
+    public static final Vote VOTE_3 = new Vote(VOTE_3_ID, VOTE_DATE_2018_10_29, USER_3, EURO_REST);
 
     public static final Vote VOTE_4 = new Vote(VOTE_4_ID, VOTE_DATE_2018_10_31, USER_1, EURO_REST);
     public static final Vote VOTE_5 = new Vote(VOTE_5_ID, VOTE_DATE_2018_10_31, USER_2, EURO_REST);
-    public static final Vote VOTE_6 = new Vote(VOTE_6_ID, VOTE_DATE_2018_10_31, ADMIN, EURO_REST);
+    public static final Vote VOTE_6 = new Vote(VOTE_6_ID, VOTE_DATE_2018_10_31, ADMIN, RUSS_REST);
 
     public static final Vote UPDATED_VOTE = new Vote(VOTE_1_ID, VOTE_1.getDate(), VOTE_1.getUser(), RUSS_REST);
 

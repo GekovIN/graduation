@@ -17,13 +17,15 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     @Transactional
     @Query("SELECT DISTINCT r FROM Restaurant r " +
             "LEFT JOIN FETCH r.menuDishes m " +
-            "LEFT JOIN FETCH m.dish")
+            "LEFT JOIN FETCH m.dish " +
+            "ORDER BY r.id")
     List<Restaurant> findAllWithMenuDishes();
 
     @Transactional
     @Query("SELECT DISTINCT r FROM Restaurant r " +
             "LEFT JOIN FETCH r.votes v " +
-            "LEFT JOIN FETCH v.user")
+            "LEFT JOIN FETCH v.user " +
+            "ORDER BY r.id")
     List<Restaurant> findAllWithVotes();
 
     @Transactional
@@ -31,21 +33,24 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
             "LEFT JOIN FETCH r.menuDishes m " +
             "LEFT JOIN FETCH m.dish " +
             "LEFT JOIN FETCH r.votes v " +
-            "LEFT JOIN FETCH v.user")
+            "LEFT JOIN FETCH v.user " +
+            "ORDER BY r.id")
     List<Restaurant> findAllWithMenuDishesAndVotes();
 
     @Transactional
     @Query( "SELECT r FROM Restaurant r " +
             "LEFT JOIN FETCH r.menuDishes m " +
             "LEFT JOIN FETCH m.dish d " +
-            "WHERE r.id=?1" )
+            "WHERE r.id=?1 " +
+            "ORDER BY r.id" )
     Restaurant findByIdWithMenuDishes(int id);
 
     @Transactional
     @Query( "SELECT r FROM Restaurant r " +
             "LEFT JOIN FETCH r.votes v " +
             "LEFT JOIN FETCH v.user " +
-            "WHERE r.id=?1" )
+            "WHERE r.id=?1 " +
+            "ORDER BY r.id" )
     Restaurant findByIdWithVotes(int id);
 
     @Transactional
@@ -53,24 +58,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
             "LEFT JOIN FETCH r.menuDishes m " +
             "LEFT JOIN FETCH m.dish " +
             "LEFT JOIN FETCH r.votes v " +
-            "LEFT JOIN FETCH v.user WHERE r.id=?1")
+            "LEFT JOIN FETCH v.user WHERE r.id=?1 " +
+            "ORDER BY r.id")
     Restaurant findByIdWithMenuDishesAndVotes(int id);
 
-    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN r.menuDishes m WHERE m.date=?1")
+    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN r.menuDishes m WHERE m.date=?1 ORDER BY r.id")
     List<Restaurant> findByDate(LocalDate date);
-//
-//    @Transactional
-//    @Query( "SELECT r FROM Restaurant r " +
-//            "LEFT JOIN FETCH r.menuDishes m " +
-//            "LEFT JOIN FETCH m.dish d " +
-//            "WHERE r.id=?1 AND m.date=?2" )
-//    Restaurant findByIdAndDateWithMenuDishes(int id, LocalDate date);
-//
-//    @Transactional
-//    @Query( "SELECT DISTINCT r FROM Restaurant r " +
-//            "JOIN FETCH r.menuDishes m " +
-//            "JOIN FETCH m.dish WHERE m.date=?1" )
-//    List<Restaurant> findByMenuDishesDate(LocalDate date);
 
     @Transactional
     @Modifying

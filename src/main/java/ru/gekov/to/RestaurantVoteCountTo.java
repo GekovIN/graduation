@@ -10,6 +10,9 @@ public class RestaurantVoteCountTo extends AbstractTo {
     private Restaurant restaurant;
     private Long votesCount;
 
+    public RestaurantVoteCountTo() {
+    }
+
     public RestaurantVoteCountTo(LocalDate date, Restaurant restaurant, Long votesCount) {
         this.date = date;
         this.restaurant = restaurant;
