@@ -27,7 +27,9 @@ public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
-    @JsonIgnoreProperties("restaurant")
+
+//  https://stackoverflow.com/questions/40972817/jsonexception-no-valuedeserializer-assigned
+    @JsonIgnoreProperties(value = "restaurant", allowSetters = true)
     @JsonView(View.JsonRestaurantsWithMenu.class)
 //    https://hibernate.atlassian.net/browse/HHH-1076
 //    https://stackoverflow.com/questions/9720452/duplicates-using-left-join-fetch
@@ -35,7 +37,9 @@ public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
-    @JsonIgnoreProperties("restaurant")
+
+//  https://stackoverflow.com/questions/40972817/jsonexception-no-valuedeserializer-assigned
+    @JsonIgnoreProperties(value = "restaurant", allowSetters = true)
     @JsonView(View.JsonRestaurantsWithVote.class)
 //  https://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags
     private Set<Vote> votes;

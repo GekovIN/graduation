@@ -93,7 +93,7 @@ class DishesControllerTest extends AbstractControllerTest {
 
     @Test
     void testDeleteNotFound() throws Exception {
-        mockMvc.perform(get(REST_URL + 9999)
+        mockMvc.perform(delete(REST_URL + 9999)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity());
     }

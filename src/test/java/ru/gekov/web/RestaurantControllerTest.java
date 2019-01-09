@@ -18,10 +18,14 @@ import static ru.gekov.RestaurantTestData.*;
 import static ru.gekov.TestUtil.readFromJsonResultActions;
 import static ru.gekov.TestUtil.userHttpBasic;
 import static ru.gekov.UserTestData.ADMIN;
+import static ru.gekov.UserTestData.USER_1;
+import static ru.gekov.util.exception.ErrorType.APP_ERROR;
+import static ru.gekov.util.exception.ErrorType.VALIDATION_ERROR;
 
 class RestaurantControllerTest extends AbstractControllerTest {
 
     private final String REST_URL = RestaurantController.REST_URL;
+    private final String REST_URL_SLASH = RestaurantController.REST_URL + "/";
 
     @Autowired
     private RestaurantService service;
@@ -48,7 +52,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetAllWithVotes() throws Exception {
-        mockMvc.perform(get(REST_URL + "/votes")
+        mockMvc.perform(get(REST_URL_SLASH + "votes")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -58,7 +62,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllWithMenuDishesAndVotes() throws Exception {
-        mockMvc.perform(get(REST_URL + "/menus-and-votes")
+        mockMvc.perform(get(REST_URL_SLASH + "menus-and-votes")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -68,7 +72,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetById() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID)
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -78,7 +82,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetByIdWithAllMenus() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/menus")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/menus")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -88,7 +92,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetByIdWithAllVotes() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/votes")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/votes")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -98,7 +102,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetByIdWithMenusAndVotes() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/menus-and-votes")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/menus-and-votes")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -108,7 +112,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetHaveMenuByDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/haveMenu?date=2018-10-31")
+        mockMvc.perform(get(REST_URL_SLASH + "haveMenu?date=2018-10-31")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -118,7 +122,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetAllWithMenuByDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/menus?date=2018-10-31")
+        mockMvc.perform(get(REST_URL_SLASH + "menus?date=2018-10-31")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -128,7 +132,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetAllWithVotesByDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/votes?date=2018-10-31")
+        mockMvc.perform(get(REST_URL_SLASH + "votes?date=2018-10-31")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -138,7 +142,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetWithMenuByIdAndDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/menus?date=2018-10-29")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/menus?date=2018-10-29")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -148,7 +152,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetWithVotesByIdAndDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/votes?date=2018-10-29")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/votes?date=2018-10-29")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -158,7 +162,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetWithMenuAndVotesByIdAndDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/menus-and-votes?date=2018-10-29")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/menus-and-votes?date=2018-10-29")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -168,7 +172,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetWithVotesCountByIdAndDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/" + EURO_REST_ID + "/votes-count?date=2018-10-31")
+        mockMvc.perform(get(REST_URL_SLASH + EURO_REST_ID + "/votes-count?date=2018-10-31")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
@@ -188,7 +192,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + "/" + EURO_REST_ID)
+        mockMvc.perform(delete(REST_URL_SLASH + EURO_REST_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
@@ -214,11 +218,79 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void testUpdate() throws Exception {
         Restaurant updated = getUpdated();
-        mockMvc.perform(put(REST_URL + "/" + EURO_REST_ID)
+        mockMvc.perform(put(REST_URL_SLASH + EURO_REST_ID)
                 .contentType(APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(ADMIN)));
 
         assertMatch(service.get(EURO_REST_ID), updated);
+    }
+
+    @Test
+    void testGetNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL_SLASH + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void testDeleteNotFound() throws Exception {
+        mockMvc.perform(delete(REST_URL_SLASH + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void testUnauthorized() throws Exception {
+        mockMvc.perform(get(REST_URL))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testWrongRole() throws Exception {
+        mockMvc.perform(delete(REST_URL_SLASH + EURO_REST_ID)
+                .with(userHttpBasic(USER_1)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(errorType(APP_ERROR))
+                .andExpect(detailMessage("Access is denied"));
+    }
+
+    @Test
+    void testCreateInvalid() throws Exception {
+        Restaurant invalid = new Restaurant(null, null, "new address");
+
+        mockMvc.perform(post(REST_URL)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
+    @Test
+    void testUpdateInvalid() throws Exception {
+        Restaurant invalid = new Restaurant(EURO_REST_ID, null, "Updated address");
+
+        mockMvc.perform(put(REST_URL_SLASH + EURO_REST_ID)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
+    @Test
+    void testUpdateHtmlUnsafe() throws Exception {
+        Restaurant invalid = new Restaurant(EURO_REST_ID, "Updated name", "<script>alert(123)</script>");
+
+        mockMvc.perform(put(REST_URL_SLASH + EURO_REST_ID)
+                .contentType(APPLICATION_JSON)
+                .content(JsonUtil.writeValue(invalid))
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
     }
 }
