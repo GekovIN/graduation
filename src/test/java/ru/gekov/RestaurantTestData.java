@@ -97,6 +97,10 @@ public class RestaurantTestData {
         return result -> assertMatchWithMenus(TestUtil.readFromJsonMvcResult(result, Restaurant.class), expected);
     }
 
+    public static ResultMatcher getRestaurantMatcherWithVotes(Restaurant expected) {
+        return result -> assertMatchWithVotes(TestUtil.readFromJsonMvcResult(result, Restaurant.class), expected);
+    }
+
     public static ResultMatcher getRestaurantToMatcher(RestaurantVoteCountTo expected) {
         return result -> assertMatchTo(TestUtil.readFromJsonMvcResult(result, RestaurantVoteCountTo.class), expected);
     }

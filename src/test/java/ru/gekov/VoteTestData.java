@@ -18,7 +18,6 @@ public class VoteTestData {
     public static final int VOTE_4_ID = VOTE_1_ID+3;
     public static final int VOTE_5_ID = VOTE_1_ID+4;
     public static final int VOTE_6_ID = VOTE_1_ID+5;
-    public static final int CREATED_VOTE_ID = VOTE_1_ID+6;
     public static final LocalDate VOTE_DATE_2018_10_29 = LocalDate.of(2018, 10, 29);
     public static final LocalDate VOTE_DATE_2018_10_31 = LocalDate.of(2018, 10, 31);
 
@@ -29,8 +28,6 @@ public class VoteTestData {
     public static final Vote VOTE_4 = new Vote(VOTE_4_ID, VOTE_DATE_2018_10_31, USER_1, EURO_REST);
     public static final Vote VOTE_5 = new Vote(VOTE_5_ID, VOTE_DATE_2018_10_31, USER_2, EURO_REST);
     public static final Vote VOTE_6 = new Vote(VOTE_6_ID, VOTE_DATE_2018_10_31, ADMIN, RUSS_REST);
-
-    public static final Vote UPDATED_VOTE = new Vote(VOTE_1_ID, VOTE_1.getDate(), VOTE_1.getUser(), RUSS_REST);
 
     public static final List<Vote> ALL_VOTES = List.of(VOTE_1, VOTE_2, VOTE_3, VOTE_4, VOTE_5, VOTE_6);
     public static final List<Vote> ALL_VOTES_AFTER_DELETE = List.of(VOTE_2, VOTE_3, VOTE_4, VOTE_5, VOTE_6);

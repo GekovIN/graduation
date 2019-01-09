@@ -30,7 +30,6 @@ public class UserTestData {
     public static final User CREATED = new User(ADMIN_ID+1, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
     public static final List<User> ALL_USERS = List.of(USER_1, USER_2, USER_3, ADMIN);
     public static final List<User> ALL_USERS_AFTER_DELETE = List.of(USER_2, USER_3, ADMIN);
-    public static final List<User> ALL_USERS_AFTER_CREATE = List.of(USER_1, USER_2, USER_3, ADMIN, CREATED);
 
     public static void assertMatch(User actual, User expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "password", "votes");

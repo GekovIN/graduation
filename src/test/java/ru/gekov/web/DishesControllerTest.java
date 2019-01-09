@@ -106,7 +106,8 @@ class DishesControllerTest extends AbstractControllerTest {
 
     @Test
     void testWrongRole() throws Exception {
-        mockMvc.perform(get(REST_URL).with(userHttpBasic(USER_1)))
+        mockMvc.perform(get(REST_URL)
+                .with(userHttpBasic(USER_1)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(errorType(APP_ERROR))
                 .andExpect(detailMessage("Access is denied"));

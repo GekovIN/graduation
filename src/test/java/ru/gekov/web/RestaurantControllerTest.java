@@ -96,7 +96,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
-                .andExpect(getRestaurantMatcherWithMenus(getEuroRestWithVotes()))
+                .andExpect(getRestaurantMatcherWithVotes(getEuroRestWithVotes()))
                 .andDo(print());
     }
 

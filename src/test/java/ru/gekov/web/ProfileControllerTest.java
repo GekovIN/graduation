@@ -84,7 +84,8 @@ class ProfileControllerTest extends AbstractControllerTest {
     void testUpdate() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
 
-        mockMvc.perform(put(REST_URL).contentType(APPLICATION_JSON)
+        mockMvc.perform(put(REST_URL)
+                .contentType(APPLICATION_JSON)
                 .with(userHttpBasic(USER_1))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
@@ -112,7 +113,8 @@ class ProfileControllerTest extends AbstractControllerTest {
     void testDuplicate() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
 
-        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(USER_1))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isConflict())

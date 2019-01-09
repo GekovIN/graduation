@@ -22,9 +22,7 @@ import static ru.gekov.TestUtil.userHttpBasic;
 import static ru.gekov.UserTestData.ADMIN;
 import static ru.gekov.UserTestData.USER_1;
 import static ru.gekov.util.exception.ErrorType.APP_ERROR;
-import static ru.gekov.util.exception.ErrorType.DATA_ERROR;
 import static ru.gekov.util.exception.ErrorType.VALIDATION_ERROR;
-import static ru.gekov.web.ExceptionInfoHandler.*;
 
 class MenuDishControllerTest extends AbstractControllerTest {
 
