@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class EntitiesUtil {
 
+//  Convert list of menuDishes to list of restaurants with menuDishes
     public static List<Restaurant> getRestaurantsWithMenu(List<MenuDish> menuDishes) {
         Map<Restaurant, List<MenuDish>> dishMap = new LinkedHashMap<>();
         menuDishes.forEach(

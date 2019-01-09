@@ -8,7 +8,9 @@ import java.util.List;
 public interface UserService {
 
     List<User> getAll();
+
     User get(int id);
+
     void delete(int id);
 
     User getWithVotes(int id);

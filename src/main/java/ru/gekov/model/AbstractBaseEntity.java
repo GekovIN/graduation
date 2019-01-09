@@ -1,27 +1,16 @@
 package ru.gekov.model;
 
 import org.springframework.data.domain.Persistable;
-
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
-    public static final int START_SEQ = 100000;
-
-//    @Id
-//    @SequenceGenerator(name = "GLOBAL_SEQ", sequenceName = "GLOBAL_SEQ",
-//                        allocationSize = 1, initialValue = START_SEQ)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GLOBAL_SEQ")
-//    protected Integer id;
+    static final int START_SEQ = 100000;
 
     protected AbstractBaseEntity() {
     }
-
-//    protected AbstractBaseEntity(Integer id) {
-//        this.id = id;
-//    }
 
     public abstract void setId(Integer id);
 
@@ -35,7 +24,6 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
     public String toString() {
         return String.format("Entity %s (%s)", getClass().getName(), getId());
     }
-
 
     @Override
     public boolean equals(Object o) {

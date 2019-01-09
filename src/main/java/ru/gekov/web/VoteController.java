@@ -86,13 +86,4 @@ public class VoteController {
         service.delete(id);
     }
 
-//  Test
-//    @PutMapping(value = "/restaurant/{id}/vote")
-//    public void vote(@PathVariable("id") Integer restaurantId,
-//                     @AuthenticationPrincipal AuthorizedUser authUser) {
-//        int userId = authUser.getId();
-//        log.info("user with id={} vote for restaurant with id={}", userId, restaurantId);
-//        service.save(LocalDateTime.of(2018, 12, 11, 10, 0), 100000, restaurantId);
-//    }
-
 }

@@ -11,10 +11,8 @@ import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
 import ru.gekov.util.ToUtil;
-import ru.gekov.util.ValidationUtil;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ru.gekov.util.EntitiesUtil.*;
 import static ru.gekov.util.ValidationUtil.*;

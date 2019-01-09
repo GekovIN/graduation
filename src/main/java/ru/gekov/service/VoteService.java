@@ -9,8 +9,12 @@ import java.util.List;
 public interface VoteService {
 
     Vote get(int id);
+
     List<Vote> getAll();
+
     Vote getByUserAndDate(int userId, LocalDate date);
+
     Vote save(LocalDateTime dateTime, int userId, int restaurantId);
+
     void delete(int id);
 }

@@ -43,7 +43,6 @@ public class AdminController {
         return service.get(id);
     }
 
-
     @GetMapping(value = "/by", produces = APPLICATION_JSON_VALUE)
     @JsonView(View.JsonProfile.class)
     public User getByMail(@RequestParam("email") String email) {

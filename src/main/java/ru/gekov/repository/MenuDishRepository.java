@@ -34,11 +34,6 @@ public interface MenuDishRepository extends JpaRepository<MenuDish, Integer> {
     @EntityGraph(attributePaths = {"dish", "restaurant"})
     List<MenuDish> findAllByDateAndRestaurantId(LocalDate date, int id);
 
-//    @Transactional
-//    @Modifying
-//    @Query("DELETE FROM MenuDish m WHERE m.id=:id")
-//    int delete(@Param("id") int id);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM MenuDish m WHERE m.id=?1")

@@ -1,10 +1,7 @@
 package ru.gekov.util;
 
 import org.slf4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindingResult;
 import ru.gekov.model.AbstractBaseEntity;
 import ru.gekov.to.AbstractTo;
 import ru.gekov.to.MenuDishTo;
@@ -14,15 +11,8 @@ import ru.gekov.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.Optional;
-import java.util.StringJoiner;
 
 public class ValidationUtil {
-
-    public static <T> T checkNotFoundOptionalWithId(Optional<T> optional, int id) {
-        checkNotFoundWithId(optional.isPresent(), id);
-        return optional.get();
-    }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
         return checkNotFound(object, "id=" + id);

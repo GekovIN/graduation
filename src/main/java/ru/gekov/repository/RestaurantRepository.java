@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-
     @Transactional
     @Query("SELECT DISTINCT r FROM Restaurant r " +
             "LEFT JOIN FETCH r.menuDishes m " +

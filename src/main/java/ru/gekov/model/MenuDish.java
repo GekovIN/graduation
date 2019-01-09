@@ -33,7 +33,6 @@ public class MenuDish extends AbstractBaseEntity {
     @JsonIgnoreProperties("menuDishes")
     private Restaurant restaurant;
 
-
     public MenuDish() {
     }
 

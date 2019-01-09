@@ -43,11 +43,6 @@ public class MenuDishServiceImpl implements MenuDishService {
     }
 
     @Override
-    public List<MenuDish> getAllByRestaurantId(int restaurantId) {
-        return menuDishRepository.findAllByRestaurantId(restaurantId);
-    }
-
-    @Override
     public MenuDish getById(int id) {
         return checkNotFoundWithId(menuDishRepository.findById(id).orElse(null), id);
     }

@@ -6,7 +6,6 @@ import ru.gekov.to.UserTo;
 
 public class ToUtil {
 
-
     public static User createNewFromTo(UserTo newUser) {
         return new User(null, newUser.getName(), newUser.getEmail().toLowerCase(), newUser.getPassword(), Role.ROLE_USER);
     }

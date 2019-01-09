@@ -32,11 +32,8 @@ public class Vote extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-
     public Vote() {
     }
-
-
 
     public Vote(LocalDate date, @NotNull User user, @NotNull Restaurant restaurant) {
         this.date = date;
