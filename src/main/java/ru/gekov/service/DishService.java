@@ -9,6 +9,6 @@ public interface DishService {
     List<Dish> getAll();
     Dish get(int id);
     Dish create(Dish dish);
-    Dish update(Dish dish);
+    void update(Dish dish);
     void delete(int id);
 }

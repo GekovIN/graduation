@@ -35,7 +35,7 @@ public interface RestaurantService {
 
     List<Restaurant> getWithVotesByDate(LocalDate date);
 
-    Restaurant update(Restaurant restaurant);
+    void update(Restaurant restaurant);
     Restaurant create(Restaurant restaurant);
     void delete(int id);
 }

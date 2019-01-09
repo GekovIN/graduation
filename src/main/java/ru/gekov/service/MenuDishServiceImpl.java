@@ -50,8 +50,8 @@ public class MenuDishServiceImpl implements MenuDishService {
     @Override
     public void update(MenuDishTo menuDishTo) {
         ValidationUtil.validateMenuDishTo(menuDishTo);
-
-        MenuDish menuDish = getById(menuDishTo.getId());
+        Integer menuId = menuDishTo.getId();
+        MenuDish menuDish = checkNotFoundWithId(getById(menuId), menuId);
         Dish dish = dishRepository.getOne(menuDishTo.getDishId());
         Restaurant restaurant = restaurantRepository.getOne(menuDishTo.getRestaurantId());
         menuDish.setDish(dish);

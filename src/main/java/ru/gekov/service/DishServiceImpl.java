@@ -38,9 +38,11 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Dish update(Dish dish) {
+    public void update(Dish dish) {
         Assert.notNull(dish, "Dish must not be null");
-        return repository.save(dish);
+        Integer id = dish.getId();
+        checkNotFoundWithId(get(id), id);
+        repository.save(dish);
     }
 
     @Override

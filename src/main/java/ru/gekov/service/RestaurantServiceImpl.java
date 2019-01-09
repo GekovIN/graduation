@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.gekov.util.ValidationUtil.*;
+import static ru.gekov.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -168,9 +169,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant update(Restaurant restaurant) {
+    public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
-        return checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.getId());
+        Integer id = restaurant.getId();
+        checkNotFoundWithId(get(id), id);
+        restaurantRepository.save(restaurant);
     }
 
     @Override
