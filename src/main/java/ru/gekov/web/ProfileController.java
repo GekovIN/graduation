@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.AuthorizedUser;
@@ -25,6 +26,7 @@ import static ru.gekov.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(ProfileController.REST_URL)
+@CrossOrigin("*")
 public class ProfileController {
     static final String REST_URL = "/profile";
     private final Logger log = LoggerFactory.getLogger(getClass());

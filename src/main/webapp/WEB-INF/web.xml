@@ -32,6 +32,16 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!--https://stackoverflow.com/questions/30936170/cant-set-authentication-header-with-angular-and-spring-security-->
+    <filter>
+        <filter-name>corsFilter</filter-name>
+        <filter-class>ru.gekov.web.CorsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>corsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

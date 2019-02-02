@@ -26,6 +26,7 @@ import static ru.gekov.util.ValidationUtil.*;
 
 @RestController
 @RequestMapping(RestaurantController.REST_URL)
+@CrossOrigin("*")
 public class RestaurantController {
 
     static final String REST_URL = "/restaurants";
