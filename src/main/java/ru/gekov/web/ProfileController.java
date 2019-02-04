@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.AuthorizedUser;
@@ -60,6 +62,11 @@ public class ProfileController {
         int id = authUser.getId();
         log.info("delete user with id={}", id);
         service.delete(id);
+    }
+
+    @GetMapping(value = "/login")
+    public ResponseEntity login() {
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
