@@ -51,6 +51,11 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
+    public Long countAllByRestaurantIdAndDate(int restaurantId, LocalDate date) {
+        return voteRepository.countAllByRestaurantIdAndDate(restaurantId, date);
+    }
+
+    @Override
     @Transactional
     public Vote save(LocalDateTime dateTime, int userId, int restaurantId) {
         Optional<Vote> voteOptional = voteRepository.findByUserIdAndDate(userId, dateTime.toLocalDate());

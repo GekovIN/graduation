@@ -63,6 +63,12 @@ public class VoteController {
         return service.getByUserAndDate(userId, date);
     }
 
+    @GetMapping(value = "/votes/count", params = {"id", "date"}, produces = APPLICATION_JSON_VALUE)
+    public Long getVotesCountByRestaurantIdAndDate(@RequestParam Integer id, @RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        log.info("get votes count by restaurant {} and date {}", id, date);
+        return service.countAllByRestaurantIdAndDate(id, date);
+    }
+
     //  Vote for restaurant by authorized user
     @PutMapping(value = "/profile/vote", params = "restaurantId", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Vote> vote(@Param("restaurantId") Integer restaurantId,

@@ -14,6 +14,8 @@ public interface VoteService {
 
     Vote getByUserAndDate(int userId, LocalDate date);
 
+    Long countAllByRestaurantIdAndDate(int restaurantId, LocalDate date);
+
     Vote save(LocalDateTime dateTime, int userId, int restaurantId);
 
     void delete(int id);
