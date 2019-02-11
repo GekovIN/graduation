@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
+import ru.gekov.to.UserTo;
 import ru.gekov.web.json.View;
 
 import javax.validation.Valid;
@@ -78,10 +79,10 @@ public class AdminController {
 
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody User user, @PathVariable Integer id) {
-        log.info("update {} with id={}", user, id);
-        assureEntityIdConsistent(user, id);
-        service.update(user);
+    public void update(@Valid @RequestBody UserTo userTo, @PathVariable Integer id) {
+        log.info("update {} with id={}", userTo, id);
+        assureToIdConsistent(userTo, id);
+        service.update(userTo);
     }
 
     @DeleteMapping("/{id}")

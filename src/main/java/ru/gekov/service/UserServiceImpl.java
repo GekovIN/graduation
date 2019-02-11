@@ -62,10 +62,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void update(User user) {
-        Assert.notNull(user, "user must not be null");
-        Integer id = user.getId();
-        checkNotFoundWithId(get(id), id);
+    public void update(UserTo userTo) {
+        Assert.notNull(userTo, "user must not be null");
+//        Integer id = userTo.getId();
+//        checkNotFoundWithId(get(id), id);
+        User user = ToUtil.updateFromTo(get(userTo.getId()), userTo);
         repository.save(prepareUserToSave(user, passwordEncoder));
     }
 

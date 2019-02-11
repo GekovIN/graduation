@@ -1,11 +1,13 @@
 package ru.gekov.to;
 
 import org.hibernate.validator.constraints.SafeHtml;
+import ru.gekov.model.Role;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Set;
 
 public class UserTo extends AbstractTo implements Serializable {
 
@@ -24,6 +26,10 @@ public class UserTo extends AbstractTo implements Serializable {
 
     @Size(min = 5, max = 32)
     private String password;
+//
+    private boolean enabled;
+//
+    private Set<Role> roles;
 
     public UserTo() {
     }
@@ -59,6 +65,25 @@ public class UserTo extends AbstractTo implements Serializable {
         this.email = email;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        if (roles.isEmpty()) {
+            this.roles = Set.of(Role.ROLE_USER);
+        } else {
+            this.roles = roles;
+        }
+    }
 
     @Override
     public String toString() {

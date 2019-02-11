@@ -17,7 +17,11 @@ public class ToUtil {
     public static User updateFromTo(User user, UserTo userTo) {
         user.setName(userTo.getName());
         user.setEmail(userTo.getEmail().toLowerCase());
-        user.setPassword(userTo.getPassword());
+        if (userTo.getPassword() != null && !userTo.getPassword().isBlank()) {
+            user.setPassword(userTo.getPassword());
+        }
+        user.setRoles(userTo.getRoles());
+        user.setEnabled(userTo.isEnabled());
         return user;
     }
 }
