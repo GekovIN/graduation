@@ -17,11 +17,9 @@ public interface UserService {
 
     User create(User user);
 
-//    void update(User user);
-
     void update(UserTo userTo);
 
-    void update(UserTo userTo, int id);
-
     User getByEmail(String email);
+
+    void updateProfile(UserTo userTo, int id);
 }

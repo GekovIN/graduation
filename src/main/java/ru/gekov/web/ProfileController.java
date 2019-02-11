@@ -8,9 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.AuthorizedUser;
@@ -89,7 +86,7 @@ public class ProfileController {
                        @AuthenticationPrincipal AuthorizedUser authUser) {
         int id = authUser.getId();
         log.info("update user with id={}", id);
-        service.update(userTo, id);
+        service.updateProfile(userTo, id);
     }
 
     @GetMapping(value = "/text")

@@ -64,17 +64,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void update(UserTo userTo) {
         Assert.notNull(userTo, "user must not be null");
-//        Integer id = userTo.getId();
-//        checkNotFoundWithId(get(id), id);
         User user = ToUtil.updateFromTo(get(userTo.getId()), userTo);
-        repository.save(prepareUserToSave(user, passwordEncoder));
+        repository.save(user);
     }
 
+//  Custom update method for user updating his profile (do not change roles and enabled):
     @Override
-    public void update(UserTo userTo, int id) {
+    public void updateProfile(UserTo userTo, int id) {
         assureToIdConsistent(userTo, id);
-        User user = ToUtil.updateFromTo(get(userTo.getId()), userTo);
-        repository.save(prepareUserToSave(user, passwordEncoder));
+        User user = get(userTo.getId());
+        user.setEmail(userTo.getEmail());
+        user.setName(userTo.getName());
+        repository.save(user);
     }
 
     @Override
