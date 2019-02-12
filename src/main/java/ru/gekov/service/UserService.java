@@ -22,4 +22,6 @@ public interface UserService {
     User getByEmail(String email);
 
     void updateProfile(UserTo userTo, int id);
+
+    void changeUserPassword(int id, String oldPassword, String newPassword);
 }

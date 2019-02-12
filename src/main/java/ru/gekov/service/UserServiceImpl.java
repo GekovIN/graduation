@@ -11,6 +11,7 @@ import ru.gekov.model.User;
 import ru.gekov.repository.UserRepository;
 import ru.gekov.to.UserTo;
 import ru.gekov.util.ToUtil;
+import ru.gekov.util.exception.InvalidOldPasswordException;
 
 import java.util.List;
 
@@ -76,6 +77,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(userTo.getEmail());
         user.setName(userTo.getName());
         repository.save(user);
+    }
+
+    @Override
+    public void changeUserPassword(int id, String oldPassword, String newPassword) {
+        User user = get(id);
+        if (!checkIfOldPasswordValid(user.getPassword(), oldPassword)) {
+            throw new InvalidOldPasswordException("Wrong old password.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repository.save(user);
+    }
+
+    private boolean checkIfOldPasswordValid(String persistPassword, String oldPassword) {
+        return passwordEncoder.matches(oldPassword, persistPassword);
     }
 
     @Override

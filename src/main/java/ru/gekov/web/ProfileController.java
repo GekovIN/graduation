@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.gekov.AuthorizedUser;
 import ru.gekov.model.User;
 import ru.gekov.service.UserService;
+import ru.gekov.to.PasswordTo;
 import ru.gekov.to.UserTo;
 import ru.gekov.web.json.View;
 
@@ -87,6 +88,13 @@ public class ProfileController {
         int id = authUser.getId();
         log.info("update user with id={}", id);
         service.updateProfile(userTo, id);
+    }
+
+    @PostMapping(value = "/changePass", consumes = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@RequestBody @Valid PasswordTo passTo, @AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("change user password with id={}", authUser.getId());
+        service.changeUserPassword(authUser.getId(), passTo.getOldPassword(), passTo.getNewPassword());
     }
 
     @GetMapping(value = "/text")
